@@ -14,7 +14,7 @@ class MapContainer extends Component {
     googleMapScript.async = true;
     window.document.body.appendChild(googleMapScript);
     googleMapScript.addEventListener('load', () => {
-this.getLatLng();
+    this.getLatLng();
     //   const coordinates = new window.google.maps.LatLng(20.96778, -89.62426);
     //   this.createGoogleMap(coordinates);
     });
