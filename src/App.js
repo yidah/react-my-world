@@ -1,13 +1,9 @@
-
-import './App.css';
-import Map from './Containers/Map/Map';
-import Filters from './Containers/Filters/Filters';
+import Layout from './Containers/Layout/Layout';
 
 function App() {
   return (
     <div className="App">
-      <Map/>
-      <Filters/>
+      <Layout />
     </div>
   );
 }
