@@ -1,150 +1,126 @@
-   .Filters{
-    width: 50%;
-    height: 100%;
-    padding: 0 2rem;
-  }
+.Filters {
+  width: 50%;
+  height: 100%;
+  padding: 0 2rem;
+}
 
-   .formstyle10{
-    /* width:500px; */
-    padding:30px;
-    /* margin:20px auto; */
-    background: #FFF;
-    border-radius: 10px;
-    -webkit-border-radius:10px;
-    -moz-border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
-    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
-    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
-  }
-  .formstyle10 .innerwrap{
-    padding: 30px;
-    background: #F8F8F8;
-    border-radius: 6px;
-    margin-bottom: 15px;
-    display: flex;
-  }
-  .formstyle10 h1{
-    background: #A0A92D;
-    padding: 20px 30px 15px 30px;
-    margin: -30px -30px 30px -30px;
-    border-radius: 10px 10px 0 0;
-    -webkit-border-radius: 10px 10px 0 0;
-    -moz-border-radius: 10px 10px 0 0;
-    color: #fff;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
-    font: normal 30px 'Bitter', serif;
-    -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-    -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-    box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-    border: 1px solid #A0A92D;
-  }
-  .formstyle10 h1 > span{
-    margin-top: 2px;
-    font: 13px Arial, Helvetica, sans-serif;
-  }
-  .formstyle10 label{
-    font: 13px Arial, Helvetica, sans-serif;
-    color: #888;
-    margin-bottom: 15px;
-  }
-  .formstyle10 input[type="text"],
-  .formstyle10 input[type="date"],
-  .formstyle10 input[type="datetime"],
-  .formstyle10 input[type="email"],
-  .formstyle10 input[type="number"],
-  .formstyle10 input[type="search"],
-  .formstyle10 input[type="time"],
-  .formstyle10 input[type="url"],
-  .formstyle10 input[type="password"],
-  .formstyle10 textarea,
-  .formstyle10 select {
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    width: 100%;
-    padding: 8px;
-    border-radius: 6px;
-    -webkit-border-radius:6px;
-    -moz-border-radius:6px;
-    border: 2px solid #fff;
-    box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
-    -moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
-    -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
-  }
+.FiltersForm {
+  padding: 1.8rem;
+  background: #fff;
+  border-radius: 0.6rem;
+  -webkit-border-radius: 0.6rem;
+  -moz-border-radius: 0.6rem;
+  box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
+  -moz-box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
+  -webkit-box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
+}
+.FiltersForm .FiltersSectionContent {
+  padding: 1.8rem;
+  background: #f8f8f8;
+  border-radius: 0.4rem;
+  margin-bottom: 0.9rem;
+  display: flex;
+}
+.FiltersForm .FiltersExploredPlace {
+  background: #a0a92d;
+  padding: 1.25rem 1.8rem 0.9rem 1.8rem;
+  margin: -1.8rem -1.8rem 1.8rem -1.8rem;
+  border-radius: 0.6rem 0.6rem 0 0;
+  -webkit-border-radius: 0.6rem 0.6rem 0 0;
+  -moz-border-radius: 0.6rem 0.6rem 0 0;
+  color: #fff;
+  text-shadow: 0.06rem 0.06rem 0.1rem rgba(0, 0, 0, 0.12);
+  font: normal 1.8rem 'Bitter', serif;
+  -moz-box-shadow: inset 0 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+  -webkit-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+  box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+  border: 0.06rem solid #a0a92d;
+}
+
+.FiltersForm label {
+  font: 13px Arial, Helvetica, sans-serif;
+  color: #888;
+  padding: 0.6rem;
+}
+
+.FiltersForm input[type='text'],
+.FiltersForm input[type='date'],
+.FiltersForm input[type='datetime'],
+.FiltersForm input[type='email'],
+.FiltersForm input[type='number'],
+.FiltersForm input[type='search'],
+.FiltersForm input[type='time'],
+.FiltersForm input[type='url'],
+.FiltersForm input[type='password'],
+.FiltersForm textarea,
+.FiltersForm select {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  width: 100%;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 0.3rem;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  border: 0.1rem solid #fff;
+  box-shadow: inset 0rem 0.06rem 0.06rem rgba(0, 0, 0, 0.33);
+  -moz-box-shadow: inset 0rem 0.06rem 0.06rem rgba(0, 0, 0, 0.33);
+  -webkit-box-shadow: inset 0rem 0.06rem 0.06rem rgba(0, 0, 0, 0.33);
+}
+
+.FiltersForm .FiltersSectionTitle {
+  font: normal 1.2rem 'Bitter', serif;
+  color: #a0a92d;
+  margin-bottom: 0.3rem;
+}
+.FiltersForm .FiltersSectionTitle span {
+  background: #a0a92d;
+  padding: 0.3rem 0.6rem 0.3rem 0.6rem;
+  position: absolute;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border: 0.2rem solid #fff;
+  font-size: 0.8rem;
+  margin-left: -2.8rem;
+  color: #fff;
+  margin-top: -0.1rem;
+}
+
+.FiltersSectionContentMultiGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   
-  .formstyle10 .section{
-    /* font: normal 20px 'Bitter', serif; */
-    color: #A0A92D;
-    margin-bottom: 5px;
-  }
-  .formstyle10 .section span {
-    background: #A0A92D;
-    padding: 5px 10px 5px 10px;
-    position: absolute;
-    border-radius: 50%;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border: 4px solid #fff;
-    font-size: 14px;
-    margin-left: -45px;
-    color: #fff;
-    margin-top: -3px;
-  }
+}
 
+.FiltersSectionContentMultiGroupSubGroup {
+  display: flex;
+  padding-bottom: 1rem;
+}
 
-/* yidah */
-
-  .subgroup{
-    display: flex;
-  }
-
-
-  .favoriteArea {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .distance {
-    display: flex;
-    align-items: center;
-  }
-
-
-  .formstyle10 select{
-    /* background: #A0A92D; */
-  }
-
-/* end yidah */
-
-  .formstyle10 input[type="button"], 
-  .formstyle10 input[type="submit"]{
-    background: #A0A92D;
-    padding: 8px 20px 8px 20px;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    color: #fff;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
-    /* font: normal 30px 'Bitter', serif; */
-    -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-    -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-    box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-    border: 1px solid #A0A92D;
-    font-size: 15px;
-  }
-  .formstyle10 input[type="button"]:hover, 
-  .formstyle10 input[type="submit"]:hover{
-    background: #A0A92D;
-    -moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
-    -webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
-    box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
-  }
-  .formstyle10 .privacypolicy{
-    float: right;
-    width: 250px;
-    font: 12px Arial, Helvetica, sans-serif;
-    color: #4D4D4D;
-    margin-top: 10px;
-    text-align: right;
-  }
+.FiltersForm input[type='button'],
+.FiltersForm input[type='submit'] {
+  background: #a0a92d;
+  padding: 0.5rem 1.2rem 0.5rem 1.2rem;
+  border-radius: 0.3rem;
+  -webkit-border-radius: 0.3rem;
+  -moz-border-radius: 0.3rem;
+  color: #fff;
+  text-shadow: 0.06rem 0.06rem 0.1rem rgba(0, 0, 0, 0.12);
+  font: normal 1.8rem 'Bitter', serif;
+  -moz-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+  -webkit-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+  box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+  border: 0.06rem solid #a0a92d;
+  font-size: 0.9rem;
+}
+.FiltersForm input[type='button']:hover,
+.FiltersForm input[type='submit']:hover {
+  background: #888e3e;
+  -moz-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.28);
+  -webkit-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.28);
+}
 
