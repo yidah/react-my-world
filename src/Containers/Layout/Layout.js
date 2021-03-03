@@ -4,7 +4,9 @@ import Filters from '../Filters/Filters';
 import classes from './Layout.module.css';
 
 class Layout extends Component {
+ 
   render() {
+   
     return (
       <div className={classes.Layout}>
         <Filters />

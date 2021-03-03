@@ -2,7 +2,19 @@ import React, { Component } from 'react';
 import classes from './Filters.module.css';
 
 class Filters extends Component {
+  
+  state = {
+    nearByPlaces : '',
+    favoriteArea : '',
+    withinTimePlace : '' 
+  }
+
   render() {
+
+    // let nearByPlacesSearch = new window.google.maps.places.SearchBox(
+    //   document.getElementById('nearByPlacesSearch'));
+
+    
     return (
       <div className={classes.Filters}>
         <div className={classes.FiltersForm}>
@@ -12,12 +24,8 @@ class Filters extends Component {
               <span>1</span>Search for nearby places
             </div>
             <div className={classes.FiltersSectionContent}>
-              <input type="text" name="field1" />
-              <input
-                type="submit"
-                name="DrawingTools"
-                placeholder="Gluten free restaurants, petrol station, etc."
-                value="Go"
+              <input type="text" id='nearByPlacesSearch' name="nearByPlaces" placeholder="i.e. gluten free restaurants, petrol station, etc." />
+              <input type="submit" name="nearByPlacesGo"  value="Go"
               />
             </div>
             <div className={classes.FiltersSectionTitle}>
@@ -28,25 +36,20 @@ class Filters extends Component {
             </div>
 
             <div className={classes.FiltersSectionTitle}>
-              <span>3</span>Enter your favourite area
+              <span>3</span>Restrict by your favourite area
             </div>
 
             <div className={classes.FiltersSectionContent}>
               <div className={classes.FiltersSectionContentMultiGroup}>
 
                 <div className={classes.FiltersSectionContentMultiGroupSubGroup}>
-                  <input type="text" name="field1" />
-                  <input
-                    type="submit"
-                    name="Zoom"
-                    placeholder="Gluten free restaurants, petrol station, etc."
-                    value="Zoom"
-                  />
+                  <input type="text" name="favoriteArea" placeholder="i.e. an area within the place you are exploring " />
+                  <input type="submit" name="Zoom" value="Zoom"/>
                 </div>
 
                 <div className={classes.FiltersSectionContentMultiGroup}>
                   <div className={classes.FiltersSectionContentMultiGroupSubGroup}>
-                    <label for="distance">Within:</label>
+                    <label htmlFor="distance">Within:</label>
                     <select name="distance" id="distance">
                       <option value="10">10 min</option>
                       <option value="15">15 min</option>
@@ -59,18 +62,14 @@ class Filters extends Component {
                       <option value="bike">bike</option>
                       <option value="bus">bus</option>
                     </select>
-                    <label for="distance">of:</label>
+                    <label htmlFor="transit">of:</label>
                   </div>
 
                 </div>
 
                 <div className={classes.FiltersSectionContentMultiGroupSubGroup}>
-                  <input type="text" name="field1" />
-                  <input
-                    type="submit"
-                    name="Go"
-                    placeholder="My hotel"
-                    value="Go"
+                  <input type="text" name="withinTimePlace" placeholder="i.e the address of your hotel" />
+                  <input type="submit" name="Go" value="Go"
                   />
                 </div>
                 
