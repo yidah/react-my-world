@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
+
 import classes from './Filters.module.css';
+import * as actionTypes from '../../store/actions/actionTypes';
 
 class Filters extends Component {
   
@@ -9,6 +12,11 @@ class Filters extends Component {
     withinTimePlace : '' 
   }
 
+  // showTools = (event)=>{
+  //   event.preventDefault();
+  //   this.props.onDrawingToolsClicked;
+
+  // }
   render() {
 
     // let nearByPlacesSearch = new window.google.maps.places.SearchBox(
@@ -24,15 +32,22 @@ class Filters extends Component {
               <span>1</span>Search for nearby places
             </div>
             <div className={classes.FiltersSectionContent}>
-              <input type="text" id='nearByPlacesSearch' name="nearByPlaces" placeholder="i.e. gluten free restaurants, petrol station, etc." />
-              <input type="submit" name="nearByPlacesGo"  value="Go"
-              />
+              <input type="text" 
+                     id='nearByPlacesSearch' 
+                     name="nearByPlaces" 
+                     placeholder="i.e. gluten free restaurants, petrol station, etc."/>
+              <input type="submit" 
+                     name="nearByPlacesGo"  
+                     value="Go"/>
             </div>
             <div className={classes.FiltersSectionTitle}>
               <span>2</span>Draw a shape to search within it for places
             </div>
             <div className={classes.FiltersSectionContent}>
-              <input type="submit" name="DrawingTools" value="Drawing Tools" />
+              <input type="button" 
+                     name="DrawingTools" 
+                     value="Drawing Tools" 
+                     onClick={this.props.onDrawingToolsClicked}/>
             </div>
 
             <div className={classes.FiltersSectionTitle}>
@@ -82,4 +97,18 @@ class Filters extends Component {
   }
 }
 
-export default Filters;
+const mapStateToProps = state => {
+  return {
+    drawingToolsClicked : state.drawingToolsClicked
+
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return{
+    onDrawingToolsClicked: ()=> dispatch({type:actionTypes.SHOW_DRAWING_TOOLS})
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filters);

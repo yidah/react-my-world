@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+
 import classes from './Map.module.css';
 // import mapphoto from '../../assets/images/mapmockup.png';
 
@@ -9,37 +11,37 @@ class MapContainer extends Component {
   }
 
   state = {
-    locations : [
+    locations: [
       {
         title: 'Paseo Montejo',
-        location: { lat:20.97823899166957, lng:-89.6194619683157 },
+        location: { lat: 20.97823899166957, lng: -89.6194619683157 },
       },
       {
         title: 'Cenote Xlacah',
-        location: { lat:21.091099698327348, lng:-89.59812711762955 },
+        location: { lat: 21.091099698327348, lng: -89.59812711762955 },
       },
       {
         title: 'Plaza Grande',
-        location: { lat:20.967153502072854, lng:-89.62369432104116 },
+        location: { lat: 20.967153502072854, lng: -89.62369432104116 },
       },
       {
         title: 'Zona Arqueologica Dzibilchaltún',
-        location: { lat:21.092487149469196, lng:-89.59526857956277 },
+        location: { lat: 21.092487149469196, lng: -89.59526857956277 },
       },
       {
         title: 'El Pinar',
-        location: { lat:20.991031337796024, lng:-89.61941536479338 },
+        location: { lat: 20.991031337796024, lng: -89.61941536479338 },
       },
     ],
-    markers: []
-  }
+    markers: [],
+  };
 
   componentDidMount = () => {
     // check the googlescript exists
     if (!document.getElementById('googleScript')) {
       const googleMapScript = document.createElement('script');
       googleMapScript.setAttribute('id', 'googleScript');
-      googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_API_KEY}&libraries=places,geometry`;
+      googleMapScript.src = `https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry,places&key=${process.env.REACT_APP_API_KEY}`;
       googleMapScript.async = true;
       window.document.body.appendChild(googleMapScript);
       googleMapScript.addEventListener('load', () => {
@@ -108,15 +110,13 @@ class MapContainer extends Component {
     // return map;
   };
 
-  createMarkers = (map)=>{
-
+  createMarkers = (map) => {
     let infoWindow = new window.google.maps.InfoWindow();
     let bounds = new window.google.maps.LatLngBounds();
     // We create array of markers
     for (let i = 0; i < this.state.locations.length; i++) {
-      
       // Position from the location array
-      let position = this.state.locations[i].location;      
+      let position = this.state.locations[i].location;
       let title = this.state.locations[i].title;
       // Marker per location
       let marker = new window.google.maps.Marker({
@@ -137,8 +137,8 @@ class MapContainer extends Component {
         this.populateInfoWindow(map, marker, infoWindow)
       );
     }
-    return bounds; 
-  }
+    return bounds;
+  };
 
   // Populates infoWindow when the marker is clicked.
   // only one infoWindow will be opened based on the marker position
@@ -151,12 +151,19 @@ class MapContainer extends Component {
 
       // make sure marker property is cleared if the infowindow is closed
       infoWindow.addListener('closeclick', () => {
-        infoWindow.marker =null;
+        infoWindow.marker = null;
       });
     }
   };
 
+
+
   render() {
+    if (this.props.drawingToolsClicked) {
+      console.log('it was clicked');
+    }else{
+      console.log('it was clicked again');
+    }
     return (
       <div
         className={classes.Map}
@@ -172,4 +179,10 @@ class MapContainer extends Component {
   }
 }
 
-export default MapContainer;
+const mapStateToProps = (state) => {
+  return {
+    drawingToolsClicked: state.drawingToolsClicked,
+  };
+};
+
+export default connect(mapStateToProps)(MapContainer);
