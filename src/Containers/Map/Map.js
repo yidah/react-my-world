@@ -97,78 +97,20 @@ class MapContainer extends Component {
   // };
 
   createGoogleMap = (coordinates) => {
-    // let map = new window.google.maps.Map(this.googleMapRef.current, {
-    //   zoom: 16,
-    //   // center: {
-    //   //   lat: coordinates.lat(),
-    //   //   lng: coordinates.lng(),
-    //   // },
-    //   disableDefaultUI: true,
-    // });
-
-    // let bounds = this.createMarkers(map);
-    // map.fitBounds(bounds);
-    // // return map;
-
-    let map;
-    let panorama;
-    // 20.96778, -89.62426
-    const berkeley = { lat: 20.96778, lng: -89.62426 };
-    const sv = new window.google.maps.StreetViewService();
-    panorama = new window.google.maps.StreetViewPanorama(
-      document.getElementById("pano")
-    );
-    // Set up the map.
-    map = new window.google.maps.Map(this.googleMapRef.current, {
-      center: berkeley,
+    let map = new window.google.maps.Map(this.googleMapRef.current, {
       zoom: 16,
-      streetViewControl: false,
+      // center: {
+      //   lat: coordinates.lat(),
+      //   lng: coordinates.lng(),
+      // },
+      disableDefaultUI: true,
     });
 
-    const processSVData =(data, status) => {
-      if (status === "OK") {
-        const location = data.location;
-        const marker = new window.google.maps.Marker({
-          position: location.latLng,
-          map,
-          title: location.description,
-        });
-        panorama.setPano(location.pano);
-        panorama.setPov({
-          heading: 270,
-          pitch: 0,
-        });
-        panorama.setVisible(true);
-        marker.addListener("click", () => {
-          const markerPanoID = location.pano;
-          // Set the Pano to use the passed panoID.
-          panorama.setPano(markerPanoID);
-          panorama.setPov({
-            heading: 270,
-            pitch: 0,
-          });
-          panorama.setVisible(true);
-        });
-      } else {
-        console.error("Street View data not found for this location.");
-      }
-    }
-
-    // Set the initial Street View camera to the center of the map
-    sv.getPanorama({ location: berkeley, radius: 50 }, processSVData);
-    // Look for a nearby Street View panorama when the map is clicked.
-    // getPanorama will return the nearest pano when the given
-    // radius is 50 meters or less.
-    map.addListener("click", (event) => {
-      sv.getPanorama({ location: event.latLng, radius: 50 }, processSVData);
-    });
-
-
+    let bounds = this.createMarkers(map);
+    map.fitBounds(bounds);
+    // return map;
   };
   
-
-
-
 
   createMarkers = (map) => {
     let infoWindow = new window.google.maps.InfoWindow();
@@ -200,25 +142,12 @@ class MapContainer extends Component {
     return bounds;
   };
 
-  // // Populates infoWindow when the marker is clicked.
-  // // only one infoWindow will be opened based on the marker position
-  // populateInfoWindow = (map, marker, infoWindow) => {
-  //   // make sure the infowindow is  not already open on this marker
-  //   if (infoWindow.marker !== marker) {
-  //     infoWindow.marker = marker;
-  //     infoWindow.setContent('<div>' + marker.title + '</div>');
-  //     infoWindow.open(map, marker);
-
-  //     // make sure marker property is cleared if the infowindow is closed
-  //     infoWindow.addListener('closeclick', () => {
-  //       infoWindow.marker = null;
-  //     });
-  //   }
-  // };
-
-    // Populates infoWindow when the marker is clicked.
+  // Populates infoWindow when the marker is clicked.
   // only one infoWindow will be opened based on the marker position
   populateInfoWindow = (map, marker, infoWindow) => {
+    let panorama;
+    const sv = new window.google.maps.StreetViewService();
+
     // make sure the infowindow is  not already open on this marker
     if (infoWindow.marker !== marker) {
       // Clear infoWindow contnet to give the streetview time to load
@@ -230,52 +159,34 @@ class MapContainer extends Component {
         infoWindow.marker = null;
       });
 
-      // Create a panorama view
-      let streetViewService = new window.google.maps.StreetViewService();
-      let radius = 50;
-
-	  // StreetViewService callback function
-      const getStreetView = (data, status) => {
-        if (status === window.google.maps.StreetViewStatus.OK) {
-          let nearStreetViewLocation = data.location.latLng;
-          let heading = window.google.maps.geometry.spherical.computeHeading(
-            nearStreetViewLocation,
-            marker.position
-          );
-
+      // StreetViewService callback function
+      const processSVData =(data, status) => {
+        if (status === "OK") {
+          const location = data.location;
           infoWindow.setContent(
             '<div>' + marker.title + '</div><div id="pano" style="width:400px; height:400px;"></div>'
           );
-
-          let panorama = new window.google.maps.StreetViewPanorama(
+          panorama = new window.google.maps.StreetViewPanorama(
             document.getElementById("pano")
           );
-
-          panorama.setPano(nearStreetViewLocation);
-
+          marker.setPosition(location.latLng);
+          panorama.setPano(location.pano);
           panorama.setPov({
-            heading: heading,
-            pitch: 30,
-          })
-
+            heading: 270,
+            pitch: 0,
+          });
           panorama.setVisible(true);
-
         } else {
-          infoWindow.setContent(
-            '<div>' + marker.title + '</div><div>No StreetViewFound</div>'
-          );
+          console.error("Street View data not found for this location.");
         }
-      };
+      }
 
       // Use streetviewservice to get closest streetview image withing
       // 50 meters of the markers position
-      streetViewService.getPanorama({location:marker.position,radius:radius},getStreetView);
-      
+      sv.getPanorama({location:marker.position,radius:50},processSVData);
       infoWindow.open(map, marker);
     }
   };
-
-
 
   render() {
     if (this.props.drawingToolsClicked) {
@@ -291,7 +202,6 @@ class MapContainer extends Component {
         ref={this.googleMapRef}
         // style={{ width: '400px', height: '300px' }}
       />
-      <div id="pano" className={classes.Pano}></div>
 
       {/* // <div className={classes.Map}>
       //   <img alt="laphoto" src={mapphoto}/>
