@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import classes from './Filters.module.css';
-import * as actionTypes from '../../store/actions/actionTypes';
+import * as mapActions from '../../store/actions/map';
 
 class Filters extends Component {
   
@@ -12,15 +12,12 @@ class Filters extends Component {
     withinTimePlace : '' 
   }
 
-  // showTools = (event)=>{
-  //   event.preventDefault();
-  //   this.props.onDrawingToolsClicked;
-
-  // }
+  
   render() {
-
+    
+    
     // let nearByPlacesSearch = new window.google.maps.places.SearchBox(
-    //   document.getElementById('nearByPlacesSearch'));
+      //   document.getElementById('nearByPlacesSearch'));
 
     
     return (
@@ -47,7 +44,7 @@ class Filters extends Component {
               <input type="button" 
                      name="DrawingTools" 
                      value="Drawing Tools" 
-                     onClick={this.props.onDrawingToolsClicked}/>
+                     onClick={() => this.props.onDrawingToolsClicked(this.props.showDrawingTools ? false : true)}/>
             </div>
 
             <div className={classes.FiltersSectionTitle}>
@@ -99,16 +96,15 @@ class Filters extends Component {
 
 const mapStateToProps = state => {
   return {
-    drawingToolsClicked : state.drawingToolsClicked
-
+    showDrawingTools: state.showDrawingTools
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return{
-    onDrawingToolsClicked: ()=> dispatch({type:actionTypes.SHOW_DRAWING_TOOLS})
-
+    onDrawingToolsClicked: (payload)=> dispatch (mapActions.setDrawingTools(payload))
   }
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(Filters);

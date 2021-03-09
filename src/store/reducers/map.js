@@ -4,24 +4,31 @@ const initialState = {
   marker: null,
   lat: null,
   lng: null,
+  showDrawingTools: false
 };
 
 const map = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.GET_GOOGLE_API:
-      return {state};
+      return { state };
 
     case actionTypes.CREATE_MAP:
-      return {state};
+      return { state };
+
+    case actionTypes.SHOW_DRAWING_TOOLS:
+      return {
+          ...state,
+          showDrawingTools: action.payload
+      };
 
     case actionTypes.GET_PLACE_BY_ADDRESS:
-      return {state};
+      return { state };
 
     case actionTypes.CREATE_MARKER:
-      return {state};
+      return { state };
 
     case actionTypes.CREATE_INFOWINDOW:
-      return {state};
+      return { state };
 
     default:
       return state;

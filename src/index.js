@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import filters from './store/reducers/filters';
+import map from './store/reducers/map';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -8,7 +8,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const store = createStore(filters);
+const store = createStore(map);
 
 // const app = (
 //   <React.StrictMode>

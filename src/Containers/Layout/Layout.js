@@ -12,7 +12,7 @@ class Layout extends Component {
     return (
       <div className={classes.Layout}>
         <Filters/>
-        <Map showDrawingtools={this.props.drawingToolsClicked} />
+        <Map />
       </div>
     );
   }
@@ -20,7 +20,6 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
   return {
-    drawingToolsClicked : state.drawingToolsClicked
   }
 }
 

@@ -8,7 +8,6 @@ class MapContainer extends Component {
   constructor() {
     super();
     this.googleMapRef = React.createRef();
-
   }
 
   state = {
@@ -33,9 +32,14 @@ class MapContainer extends Component {
         title: 'El Pinar',
         location: { lat: 20.991031337796024, lng: -89.61941536479338 },
       },
-    ],
-    markers: [],
+    ]
+    
   };
+
+  polygon = null;
+  drawingManager = null;
+  map = null;
+  markers= [];
 
   componentDidMount = () => {
     // check the googlescript exists
@@ -47,6 +51,18 @@ class MapContainer extends Component {
       window.document.body.appendChild(googleMapScript);
       googleMapScript.addEventListener('load', () => {
         // this.getLatLng();
+        this.drawingManager = new window.google.maps.drawing.DrawingManager({
+          drawingMode: window.google.maps.drawing.OverlayType.POLYGON,
+          drawingControl: true,
+          drawingControlOptions: {
+            position: window.google.maps.ControlPosition.TOP_CENTER,
+            drawingModes: [window.google.maps.drawing.OverlayType.POLYGON],
+          },
+        });
+
+        this.drawingManager.addListener('overlaycomplete', (event) =>
+          this.drawPolygon(event)
+        );
         const coordinates = new window.google.maps.LatLng(20.96778, -89.62426);
         this.createGoogleMap(coordinates);
       });
@@ -97,7 +113,7 @@ class MapContainer extends Component {
   // };
 
   createGoogleMap = (coordinates) => {
-    let map = new window.google.maps.Map(this.googleMapRef.current, {
+    this.map = new window.google.maps.Map(this.googleMapRef.current, {
       zoom: 16,
       // center: {
       //   lat: coordinates.lat(),
@@ -105,12 +121,9 @@ class MapContainer extends Component {
       // },
       disableDefaultUI: true,
     });
-
-    let bounds = this.createMarkers(map);
-    map.fitBounds(bounds);
-    // return map;
+    let bounds = this.createMarkers(this.map);
+    this.map.fitBounds(bounds);
   };
-  
 
   createMarkers = (map) => {
     let infoWindow = new window.google.maps.InfoWindow();
@@ -129,7 +142,7 @@ class MapContainer extends Component {
         id: i,
       });
 
-      this.state.markers.push(marker);
+      this.markers.push(marker);
 
       // extend the bounaries of the map for each marker
       bounds.extend(marker.position);
@@ -160,14 +173,16 @@ class MapContainer extends Component {
       });
 
       // StreetViewService callback function
-      const processSVData =(data, status) => {
-        if (status === "OK") {
+      const processSVData = (data, status) => {
+        if (status === 'OK') {
           const location = data.location;
           infoWindow.setContent(
-            '<div>' + marker.title + '</div><div id="pano" style="width:400px; height:400px;"></div>'
+            '<div>' +
+              marker.title +
+              '</div><div id="pano" style="width:400px; height:400px;"></div>'
           );
           panorama = new window.google.maps.StreetViewPanorama(
-            document.getElementById("pano")
+            document.getElementById('pano')
           );
           marker.setPosition(location.latLng);
           panorama.setPano(location.pano);
@@ -177,35 +192,68 @@ class MapContainer extends Component {
           });
           panorama.setVisible(true);
         } else {
-          console.error("Street View data not found for this location.");
+          console.error('Street View data not found for this location.');
         }
-      }
+      };
 
       // Use streetviewservice to get closest streetview image withing
       // 50 meters of the markers position
-      sv.getPanorama({location:marker.position,radius:50},processSVData);
+      sv.getPanorama({ location: marker.position, radius: 50 }, processSVData);
       infoWindow.open(map, marker);
     }
   };
 
+  drawPolygon = (event) => {
+    //Is there exsiting poligon remove it and its markers too
+    if (this.polygon) {
+      this.polygon.setMap(null);
+      //here remove markers
+    }
+
+    // switch drawing to HAND (no longer drawing)so user can click on the markers
+    // this.drawingManager.setDrawingMode(null);
+
+    // create a new editable polygon
+    this.polygon = event.overlay;
+    this.polygon.setEditable(true);
+
+    //here search markers withing polygon
+    this.searchWithinPolygon();
+    
+    // Search if poly changed
+    this.polygon
+      .getPath()
+      .addListener('set_at', this.searchWithinPolygon);
+    this.polygon
+      .getPath()
+      .addListener('insert_at', this.searchWithinPolygon);
+
+  };
+
+  searchWithinPolygon = () => {
+    for (let i = 0; i < this.markers.length; i++) {
+      if(window.google.maps.geometry.poly.containsLocation(this.markers[i].position, this.polygon)){
+        this.markers[i].setMap(this.map);
+      }else{
+        this.markers[i].setMap(null);
+      }      
+    }
+  };
+
   render() {
-    if (this.props.drawingToolsClicked) {
-      console.log('it was clicked');
-    }else{
-      console.log('it was clicked again');
+    // Toogle drawing tools
+    if (this.props.showDrawingTools && this.drawingManager.map) {
+      this.drawingManager.setMap(null);
+      // remove polygon if user removed map
+      if(this.polygon){
+        this.polygon.setMap(null);
+      }
+    } else if (!this.props.showDrawingTools && this.drawingManager) {
+      this.drawingManager.setMap(this.map);
     }
     return (
       <>
-      <div
-        className={classes.Map}
-        id={classes.GoogleMap}
-        ref={this.googleMapRef}
-        // style={{ width: '400px', height: '300px' }}
-      />
-
-      {/* // <div className={classes.Map}>
-      //   <img alt="laphoto" src={mapphoto}/>
-      // </div> */}
+        <div className={classes.Map} id="GoogleMap" ref={this.googleMapRef} />
       </>
     );
   }
@@ -213,8 +261,12 @@ class MapContainer extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    drawingToolsClicked: state.drawingToolsClicked,
+    showDrawingTools: state.showDrawingTools,
   };
 };
 
-export default connect(mapStateToProps)(MapContainer);
+const mapDispatchToProps = (dispatch) => {
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapContainer);
