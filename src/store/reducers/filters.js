@@ -1,16 +1,15 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  showDrawingTools: false
+  withinTimePlace : '' 
 };
 
-const map = (state = initialState, action) => {
+const filters = (state = initialState, action) => {
   switch (action.type) {
-
-    case actionTypes.SHOW_DRAWING_TOOLS:
-      return {
-          ...state,
-          showDrawingTools: action.payload
+    case actionTypes.SET_FORM_VALUES:
+      return { 
+        ...state,
+        [action.payload.name]:action.payload.value 
       };
 
     case actionTypes.GET_PLACE_BY_ADDRESS:
@@ -21,4 +20,4 @@ const map = (state = initialState, action) => {
   }
 };
 
-export default map;
+export default filters;

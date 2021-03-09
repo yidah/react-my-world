@@ -261,7 +261,7 @@ class MapContainer extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    showDrawingTools: state.showDrawingTools,
+    showDrawingTools: state.map.showDrawingTools,
   };
 };
 

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import classes from './Filters.module.css';
 import * as mapActions from '../../store/actions/map';
+import * as filterActions from '../../store/actions/filters';
 
 class Filters extends Component {
   
@@ -12,6 +13,10 @@ class Filters extends Component {
     withinTimePlace : '' 
   }
 
+
+  changeHandler = (e) => {
+    this.props.setFormValues({name:e.target.name, value:e.target.value});
+  };
   
   render() {
     
@@ -80,7 +85,8 @@ class Filters extends Component {
                 </div>
 
                 <div className={classes.FiltersSectionContentMultiGroupSubGroup}>
-                  <input type="text" name="withinTimePlace" placeholder="i.e the address of your hotel" />
+                  <input type="text" name="withinTimePlace" placeholder="i.e the address of your hotel"
+                         onChange={this.changeHandler} value={this.props.withinTimePlace}/>
                   <input type="submit" name="Go" value="Go"
                   />
                 </div>
@@ -96,13 +102,15 @@ class Filters extends Component {
 
 const mapStateToProps = state => {
   return {
-    showDrawingTools: state.showDrawingTools
+    showDrawingTools: state.map.showDrawingTools,
+    withinTimePlace:  state.filters.withinTimePlace
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return{
-    onDrawingToolsClicked: (payload)=> dispatch (mapActions.setDrawingTools(payload))
+    onDrawingToolsClicked: (payload)=> dispatch (mapActions.setDrawingTools(payload)),
+    setFormValues: (payload)=> dispatch (filterActions.setFormValues(payload))
   }
 }
 

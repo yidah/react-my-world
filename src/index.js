@@ -1,6 +1,7 @@
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import map from './store/reducers/map';
+import mapReducer from './store/reducers/map';
+import filtersReducer from './store/reducers/filters';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -8,7 +9,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const store = createStore(map);
+const rootReducer = combineReducers({filters:filtersReducer, map:mapReducer})
+const store = createStore(rootReducer);
 
 // const app = (
 //   <React.StrictMode>

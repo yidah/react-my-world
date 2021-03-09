@@ -1,16 +1,9 @@
 import * as actionTypes from "./actionTypes";
 
-export const setDrawingTools = (showDrawingTools) => {
-    if(showDrawingTools) {
-        return {
-            type: actionTypes.SHOW_DRAWING_TOOLS,
-            payload: true 
-        }
-    }
-
+export const setDrawingTools = (payload) => {
     return {
         type: actionTypes.SHOW_DRAWING_TOOLS,
-        payload: false 
+        payload: payload 
     }
 
 }
