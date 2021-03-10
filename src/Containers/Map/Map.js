@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import classes from './Map.module.css';
-// import mapphoto from '../../assets/images/mapmockup.png';
+import * as mapActions from '../../store/actions/map';
 
 class MapContainer extends Component {
   constructor() {
@@ -32,14 +32,13 @@ class MapContainer extends Component {
         title: 'El Pinar',
         location: { lat: 20.991031337796024, lng: -89.61941536479338 },
       },
-    ]
-    
+    ],
   };
 
   polygon = null;
   drawingManager = null;
   map = null;
-  markers= [];
+  markers = [];
 
   componentDidMount = () => {
     // check the googlescript exists
@@ -121,6 +120,10 @@ class MapContainer extends Component {
       // },
       disableDefaultUI: true,
     });
+
+    // redux state
+    this.props.setMap({ map: this.map });
+
     let bounds = this.createMarkers(this.map);
     this.map.fitBounds(bounds);
   };
@@ -143,6 +146,9 @@ class MapContainer extends Component {
       });
 
       this.markers.push(marker);
+
+      // redux state
+      this.props.setMarkers({ markers: this.markers });
 
       // extend the bounaries of the map for each marker
       bounds.extend(marker.position);
@@ -219,24 +225,24 @@ class MapContainer extends Component {
 
     //here search markers withing polygon
     this.searchWithinPolygon();
-    
-    // Search if poly changed
-    this.polygon
-      .getPath()
-      .addListener('set_at', this.searchWithinPolygon);
-    this.polygon
-      .getPath()
-      .addListener('insert_at', this.searchWithinPolygon);
 
+    // Search if poly changed
+    this.polygon.getPath().addListener('set_at', this.searchWithinPolygon);
+    this.polygon.getPath().addListener('insert_at', this.searchWithinPolygon);
   };
 
   searchWithinPolygon = () => {
     for (let i = 0; i < this.markers.length; i++) {
-      if(window.google.maps.geometry.poly.containsLocation(this.markers[i].position, this.polygon)){
+      if (
+        window.google.maps.geometry.poly.containsLocation(
+          this.markers[i].position,
+          this.polygon
+        )
+      ) {
         this.markers[i].setMap(this.map);
-      }else{
+      } else {
         this.markers[i].setMap(null);
-      }      
+      }
     }
   };
 
@@ -245,12 +251,24 @@ class MapContainer extends Component {
     if (this.props.showDrawingTools && this.drawingManager.map) {
       this.drawingManager.setMap(null);
       // remove polygon if user removed map
-      if(this.polygon){
+      if (this.polygon) {
         this.polygon.setMap(null);
       }
     } else if (!this.props.showDrawingTools && this.drawingManager) {
       this.drawingManager.setMap(this.map);
     }
+
+    // Search within time
+    // if(this.props.searchWithinTime){
+
+    //   //here code to search
+
+    //   //set
+    //   // this.props.setSearchWithinTime(false);
+    //   console.log("input value",this.props.withinTimePlace);
+    //   console.log("click value",this.props.searchWithinTime);
+
+    // }
     return (
       <>
         <div className={classes.Map} id="GoogleMap" ref={this.googleMapRef} />
@@ -262,11 +280,17 @@ class MapContainer extends Component {
 const mapStateToProps = (state) => {
   return {
     showDrawingTools: state.map.showDrawingTools,
+    withinTimePlace: state.filters.withinTimePlace,
+    searchWithinTime: state.map.searchWithinTime,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    setSearchWithinTime: (payload) => dispatch(mapActions.setSearchWithinTime(payload)),
+    setMarkers: (payload) => dispatch(mapActions.setMarkers(payload)),
+    setMap: (payload) => dispatch(mapActions.setMap(payload)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapContainer);
