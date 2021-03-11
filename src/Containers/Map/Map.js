@@ -333,13 +333,13 @@ class MapContainer extends Component {
 
   render() {
     // Toogle drawing tools
-    if (this.props.showDrawingTools && this.drawingManager.map) {
+    if (!this.props.showDrawingTools && this.drawingManager) {
       this.drawingManager.setMap(null);
       // remove polygon if user removed map
       if (this.polygon) {
         this.polygon.setMap(null);
       }
-    } else if (!this.props.showDrawingTools && this.drawingManager) {
+    } else if (this.props.showDrawingTools && !this.drawingManager.map) {
       this.drawingManager.setMap(this.map);
     }
 

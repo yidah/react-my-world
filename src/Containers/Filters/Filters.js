@@ -56,11 +56,7 @@ class Filters extends Component {
                 type="button"
                 name="DrawingTools"
                 value="Drawing Tools"
-                onClick={() =>
-                  this.props.onDrawingToolsClicked(
-                    this.props.showDrawingTools ? false : true
-                  )
-                }
+                onClick={() =>this.props.setDrawingTools(!this.props.showDrawingTools)}
               />
             </div>
 
@@ -148,11 +144,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onDrawingToolsClicked: (payload) =>
-      dispatch(mapActions.setDrawingTools(payload)),
+    setDrawingTools: (payload) => dispatch(mapActions.setDrawingTools(payload)),
     setFormValues: (payload) => dispatch(filterActions.setFormValues(payload)),
-    setSearchWithinTime: (payload) =>
-      dispatch(mapActions.setSearchWithinTime(payload)),
+    setSearchWithinTime: (payload) => dispatch(mapActions.setSearchWithinTime(payload)),
   };
 };
 
