@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import classes from './Filters.module.css';
 import * as mapActions from '../../store/actions/map';
 import * as filterActions from '../../store/actions/filters';
+// import {hideMarkers} from '../../utils/utils';
 
 class Filters extends Component {
   state = {
@@ -20,10 +21,10 @@ class Filters extends Component {
     if (status === 'OK') {
       let maxDuration = document.getElementById('maxDuration').value;
       let origins = response.originAddresses;
-      // let destinations = response.destinationAddresses;
+      let destinations = response.destinationAddresses;
       let newMarkers= [...this.props.markers];
       // let atLeastOne = false;
-
+      // hideMarkers(this.props.markers);
       for (let i = 0; i < origins.length; i++) {
         let results = response.rows[i].elements;
         for (let j = 0; j < results.length; j++) {
@@ -31,8 +32,8 @@ class Filters extends Component {
           let distanceText = element.distance.text;
           let durationText = element.duration.text;
           let duration = element.duration.value/60;
-          // let from = origins[i];
-          // let to = destinations[j];
+          let from = origins[i];
+          let to = destinations[j];
           
           //Display markers that are within time selected
           if(duration <= maxDuration){
@@ -41,9 +42,10 @@ class Filters extends Component {
 
            //InfoWindow that opens immediately with distance and duration 
            let infowindow = new window.google.maps.InfoWindow({
-             content:durationText + ' away, ' + distanceText
+            //  content:'From:'+ from+ 'to: '+ to + '-' + durationText + ' away, ' + distanceText
+             content:'<div><b>From:</b> ' + from +'</div><div><b>To:</b> ' + to +'</div><div><b>Time and Distance: </b>' + durationText + ' away, ' + distanceText +'</div>'
            });
-
+           
            infowindow.open(this.props.map,newMarkers[i]);
            newMarkers[i].infowindow= infowindow;
 
