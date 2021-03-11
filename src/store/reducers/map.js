@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   showDrawingTools: false,
-  searchWithinTime: false,
+  searchWithinTime:false,
   map:{},
   markers:[]
 };

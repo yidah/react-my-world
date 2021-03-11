@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import classes from './Map.module.css';
 import * as mapActions from '../../store/actions/map';
+// import {hideMarkers} from '../../utils/utils';
 
 class MapContainer extends Component {
   constructor() {
@@ -110,6 +111,12 @@ class MapContainer extends Component {
   //     }
   //   );
   // };
+
+  hideMarkers = () => {
+    for (let i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(null);
+    }
+  };
 
   createGoogleMap = (coordinates) => {
     this.map = new window.google.maps.Map(this.googleMapRef.current, {
@@ -246,6 +253,84 @@ class MapContainer extends Component {
     }
   };
 
+  getDistancesBetweenMarkersAndAddress = (response, status) => {
+    if (status === 'OK') {
+      let maxDuration = this.props.maxDuration;
+      let origins = response.originAddresses;
+      let destinations = response.destinationAddresses;
+
+      // let atLeastOne = false;
+      for (let i = 0; i < origins.length; i++) {
+        let results = response.rows[i].elements;
+        for (let j = 0; j < results.length; j++) {
+          let element = results[j];
+          let distanceText = element.distance.text;
+          let durationText = element.duration.text;
+          let duration = element.duration.value/60;
+          let from = origins[i];
+          let to = destinations[j];
+          
+          //Display markers that are within time selected
+          if(duration <= maxDuration){
+           this.markers[i].setMap(this.map);
+          //  atLeastOne = true;
+
+           //InfoWindow that opens immediately with distance and duration 
+           let infowindow = new window.google.maps.InfoWindow({
+             content:'<div><b>From:</b> ' + from +'</div><div><b>To:</b> ' + to +'</div><div><b>Time and Distance: </b>' + durationText + ' away, ' + distanceText +'</div>'
+           });
+           
+           infowindow.open(this.props.map,this.markers[i]);
+           this.markers[i].infowindow= infowindow;
+
+           //close the small window if user clicks marker 
+           window.google.maps.event.addListener(this.markers[i], 'click', ()=>{
+           infowindow.close();
+           })
+          }
+        }
+      }
+    } else {
+      alert('Error while getting distances. The error was: ', status);
+    }
+
+    this.props.setSearchWithinTime(false);
+  };
+
+  SearchWithingTime = () => {
+
+    this.hideMarkers();
+    //initialized distance matrix service
+    let distanceMatrixService = new window.google.maps.DistanceMatrixService();
+    let address = this.props.withinTimePlace;
+
+    if (address === '') {
+      alert('You must enter an address, estimate time and transport to get there');
+    } else {
+      let origins = [];
+      for (let i = 0; i < this.markers.length; i++) {
+        origins[i] = this.markers[i].position;
+      }
+      let destination = address;
+      let mode = this.props.mode;
+
+      //get distances between origins (markers) and the destination (address)
+      distanceMatrixService.getDistanceMatrix(
+        {
+          origins: origins,
+          destinations: [destination],
+          travelMode: window.google.maps.TravelMode[mode],
+          unitSystem: window.google.maps.UnitSystem.METRIC,
+          avoidHighways: false,
+          avoidTolls: false,
+        },
+        this.getDistancesBetweenMarkersAndAddress
+      );
+    }
+  };
+
+
+
   render() {
     // Toogle drawing tools
     if (this.props.showDrawingTools && this.drawingManager.map) {
@@ -258,17 +343,10 @@ class MapContainer extends Component {
       this.drawingManager.setMap(this.map);
     }
 
-    // Search within time
-    // if(this.props.searchWithinTime){
+    if(this.props.searchWithinTime){
+      this.SearchWithingTime();
+    }
 
-    //   //here code to search
-
-    //   //set
-    //   // this.props.setSearchWithinTime(false);
-    //   console.log("input value",this.props.withinTimePlace);
-    //   console.log("click value",this.props.searchWithinTime);
-
-    // }
     return (
       <>
         <div className={classes.Map} id="GoogleMap" ref={this.googleMapRef} />
@@ -282,6 +360,8 @@ const mapStateToProps = (state) => {
     showDrawingTools: state.map.showDrawingTools,
     withinTimePlace: state.filters.withinTimePlace,
     searchWithinTime: state.map.searchWithinTime,
+    mode:state.filters.mode,
+    maxDuration: state.filters.maxDuration
   };
 };
 
