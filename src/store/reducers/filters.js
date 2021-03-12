@@ -1,7 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  withinTimePlace: '',
   maxDuration:'10',
   mode:'DRIVING', 
 };

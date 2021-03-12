@@ -105,10 +105,12 @@ class Filters extends Component {
                 >
                   <input
                     type="text"
+                    id="withinTimePlace"
                     name="withinTimePlace"
                     placeholder="i.e the address of your hotel"
-                    onChange={this.changeHandler}
-                    value={this.props.withinTimePlace}
+                    // THIS IS HANDLED IN MAPS AS THIS CONTROL IS LINKED TO SEARCHBOX GOOGLE CONTROL
+                    // onChange={this.changeHandler}
+                    // value={this.props.withinTimePlace}
                   />
                   <input
                     type="button"
@@ -129,7 +131,6 @@ class Filters extends Component {
 const mapStateToProps = (state) => {
   return {
     showDrawingTools: state.map.showDrawingTools,
-    withinTimePlace: state.filters.withinTimePlace,
   };
 };
 

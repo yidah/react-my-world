@@ -69,6 +69,7 @@ class MapContainer extends Component {
 
         // this.nearByPlacesAutocomplete = new window.google.maps.places.Autocomplete(document.getElementById('nearByPlacesSearch'));
         this.nearByPlacesSearchBox = new window.google.maps.places.SearchBox(document.getElementById('nearByPlacesSearchBox'));
+        this.withinTimePlaceSearchBox = new window.google.maps.places.SearchBox(document.getElementById('withinTimePlace'));
 
         // 1. the user selects a prediction from the picklist
         // 2. NOTE: THERE SI ANOTHER EVENT HANDLER IN FILTERS COMPOENNT ATTACHED TO
@@ -81,58 +82,6 @@ class MapContainer extends Component {
       });
     }
   };
-
-
-
-
-  // getLatLng = () => {
-  //   let lat, lng;
-
-  //   let placeName = 'Paseo Montejo';
-  //   new window.google.maps.Geocoder().geocode(
-  //     { address: `${placeName}` },
-  //     (results, status) => {
-  //       if (status === window.google.maps.GeocoderStatus.OK) {
-  //       //   placeId = results[0].place_id;
-  //         let map = this.createGoogleMap(results[0].geometry.location);
-  //         map.setCenter({
-  //           lat: results[0].geometry.location.lat(),
-  //           lng: results[0].geometry.location.lng(),
-  //         })
-
-  //         // MARKER
-  //         lat = results[0].geometry.location.lat();
-  //         lng = results[0].geometry.location.lng();
-  //         let marker = new window.google.maps.Marker({
-  //             position: { lat, lng },
-  //             map: map,
-  //             animation: window.google.maps.Animation.DROP,
-  //             title: `${placeName}`
-  //         });
-
-  //         // INFO WINDOW
-  //         var infoWindow= new window.google.maps.InfoWindow({
-  //             content: 'Paseo montejo un sin fin the historias'
-  //         });
-
-  //         marker.addListener('click', function(){
-  //             infoWindow.open(map, marker);
-  //         });
-
-  //       } else {
-  //         alert(
-  //           'Geocode was not successful for the following reason: ' + status
-  //         );
-  //       }
-  //     }
-  //   );
-  // };
-
-  // hideMarkers = () => {
-  //   for (let i = 0; i < this.markers.length; i++) {
-  //     this.markers[i].setMap(null);
-  //   }
-  // };
 
   hideMarkers = (markers) => {
     for (let i = 0; i < markers.length; i++) {
@@ -215,6 +164,7 @@ class MapContainer extends Component {
     let bounds = this.createMarkers(this.map);
 
     this.nearByPlacesSearchBox.setBounds(bounds);
+    this.withinTimePlaceSearchBox.setBounds(bounds);
     // this.nearByPlacesAutocomplete.bindTo('bounds', this.map);
 
     this.map.fitBounds(bounds);
@@ -386,7 +336,7 @@ class MapContainer extends Component {
 
     //initialized distance matrix service
     let distanceMatrixService = new window.google.maps.DistanceMatrixService();
-    let address = this.props.withinTimePlace;
+    let address = document.getElementById('withinTimePlace').value;
 
     if (address === '') {
       alert('You must enter an address, estimate time and transport to get there');
@@ -448,7 +398,6 @@ const mapStateToProps = (state) => {
     searchNearbyPlaces: state.map.searchNearbyPlaces,
     showDrawingTools: state.map.showDrawingTools,
     searchWithinTime: state.map.searchWithinTime,
-    withinTimePlace: state.filters.withinTimePlace,
     mode:state.filters.mode,
     maxDuration: state.filters.maxDuration
   };
