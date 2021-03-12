@@ -212,14 +212,10 @@ class MapContainer extends Component {
       disableDefaultUI: true,
     });
 
-    // this.nearByPlacesAutocomplete.bindTo('bounds', this.map);
-
-    // // redux state
-    // this.props.setMap({ map: this.map });
-
     let bounds = this.createMarkers(this.map);
 
     this.nearByPlacesSearchBox.setBounds(bounds);
+    // this.nearByPlacesAutocomplete.bindTo('bounds', this.map);
 
     this.map.fitBounds(bounds);
   };
@@ -242,9 +238,6 @@ class MapContainer extends Component {
       });
 
       this.markers.push(marker);
-
-      // // redux state
-      // this.props.setMarkers({ markers: this.markers });
 
       // extend the bounaries of the map for each marker
       bounds.extend(marker.position);
@@ -452,10 +445,10 @@ class MapContainer extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    showDrawingTools: state.map.showDrawingTools,
-    withinTimePlace: state.filters.withinTimePlace,
-    searchWithinTime: state.map.searchWithinTime,
     searchNearbyPlaces: state.map.searchNearbyPlaces,
+    showDrawingTools: state.map.showDrawingTools,
+    searchWithinTime: state.map.searchWithinTime,
+    withinTimePlace: state.filters.withinTimePlace,
     mode:state.filters.mode,
     maxDuration: state.filters.maxDuration
   };

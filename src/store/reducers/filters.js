@@ -1,7 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  nearByPlacesSearch:'',
   withinTimePlace: '',
   maxDuration:'10',
   mode:'DRIVING', 
@@ -14,9 +13,6 @@ const filters = (state = initialState, action) => {
         ...state,
         [action.payload.name]:action.payload.value 
       };
-
-    case actionTypes.GET_PLACE_BY_ADDRESS:
-      return { state };
 
     default:
       return state;
