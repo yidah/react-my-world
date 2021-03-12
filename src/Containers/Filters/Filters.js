@@ -7,24 +7,12 @@ import * as filterActions from '../../store/actions/filters';
 // import {hideMarkers} from '../../utils/utils';
 
 class Filters extends Component {
-  state = {
-    nearByPlaces: '',
-    favoriteArea: '',
-    // withinTimePlace : ''
-  };
 
   changeHandler = (e) => {
     this.props.setFormValues({ name: e.target.name, value: e.target.value });
     console.log('name:' + e.target.name + 'value:' + e.target.value);
   };
 
-  SearchWithingTime = () => {
-    this.props.setSearchWithinTime(true);
-  };
-
-  // showDrawingTools=()=>{
-  //   this.props.setDrawingTools(true);
-  // }
   render() {
     // let nearByPlacesSearch = new window.google.maps.places.SearchBox(
     //   document.getElementById('nearByPlacesSearch'));
@@ -121,7 +109,7 @@ class Filters extends Component {
                     type="button"
                     name="Go"
                     value="Go"
-                    onClick={this.SearchWithingTime}
+                    onClick={()=>this.props.setSearchWithinTime(true)}
                   />
                 </div>
               </div>
@@ -137,8 +125,6 @@ const mapStateToProps = (state) => {
   return {
     showDrawingTools: state.map.showDrawingTools,
     withinTimePlace: state.filters.withinTimePlace,
-    markers: state.map.markers,
-    map: state.map.map,
   };
 };
 
