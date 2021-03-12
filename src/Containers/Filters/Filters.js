@@ -13,9 +13,10 @@ class Filters extends Component {
     console.log('name:' + e.target.name + 'value:' + e.target.value);
   };
 
+
+
   render() {
-    // let nearByPlacesSearch = new window.google.maps.places.SearchBox(
-    //   document.getElementById('nearByPlacesSearch'));
+
 
     return (
       <div className={classes.Filters}>
@@ -28,13 +29,17 @@ class Filters extends Component {
             <div className={classes.FiltersSectionContent}>
               <input
                 type="text"
-                id="nearByPlacesSearch"
+                id="nearByPlacesSearchBox"
                 name="nearByPlaces"
                 placeholder="i.e. gluten free restaurants, petrol station, etc."
-                onChange={this.changeHandler}
-                value={this.props.nearByPlacesSearch}
+                // THIS IS HANDLED IN MAPS AS THIS CONTROL IS LINKED TO SEARCHBOX GOOGLE CONTROL
+                // onChange={this.changeHandler}
+                // value={this.props.nearByPlacesSearch}
               />
-              <input type="button" name="nearByPlacesGo" value="Go" />
+              <input type="button" 
+                     name="nearByPlacesGoSearch" 
+                     value="Go" 
+                     onClick={()=>this.props.setNearbyPlaceGoSearch(true)}/>
             </div>
             <div className={classes.FiltersSectionTitle}>
               <span>2</span>Draw a shape to search within it for places
@@ -133,6 +138,8 @@ const mapDispatchToProps = (dispatch) => {
     setDrawingTools: (payload) => dispatch(mapActions.setDrawingTools(payload)),
     setFormValues: (payload) => dispatch(filterActions.setFormValues(payload)),
     setSearchWithinTime: (payload) => dispatch(mapActions.setSearchWithinTime(payload)),
+    setNearbyPlaceGoSearch: (payload) => dispatch(mapActions.setNearbyPlaceGoSearch(payload)),
+    
   };
 };
 

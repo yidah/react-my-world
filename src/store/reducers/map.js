@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   showDrawingTools: false,
   searchWithinTime:false,
+  searchNearbyPlaces:false,
   map:{},
   markers:[]
 };
@@ -31,6 +32,12 @@ const map = (state = initialState, action) => {
       return {
         ...state,
         searchWithinTime: action.payload,
+      };
+
+    case actionTypes.NEARBY_PLACES_SEARCH:
+      return {
+        ...state,
+        searchNearbyPlaces: action.payload,
       };
 
     default:

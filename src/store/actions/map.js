@@ -28,3 +28,9 @@ export const setSearchWithinTime = (payload)=>{
         payload:payload
     }
 }
+export const setNearbyPlaceGoSearch = (payload)=>{
+    return{
+        type:actionTypes.NEARBY_PLACES_SEARCH,
+        payload:payload
+    }
+}

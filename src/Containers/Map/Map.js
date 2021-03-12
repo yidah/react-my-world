@@ -40,6 +40,9 @@ class MapContainer extends Component {
   drawingManager = null;
   map = null;
   markers = [];
+  placeMarkers=[];
+  nearByPlacesAutocomplete= null;
+
 
   componentDidMount = () => {
     // check the googlescript exists
@@ -63,11 +66,24 @@ class MapContainer extends Component {
         this.drawingManager.addListener('overlaycomplete', (event) =>
           this.drawPolygon(event)
         );
+
+        // this.nearByPlacesAutocomplete = new window.google.maps.places.Autocomplete(document.getElementById('nearByPlacesSearch'));
+        this.nearByPlacesSearchBox = new window.google.maps.places.SearchBox(document.getElementById('nearByPlacesSearchBox'));
+
+        // 1. the user selects a prediction from the picklist
+        // 2. NOTE: THERE SI ANOTHER EVENT HANDLER IN FILTERS COMPOENNT ATTACHED TO
+        //    THE GO BUTTON WHEN THE USER SELECTS A PREDICTIONS AND CLICKS "GO"
+        this.nearByPlacesSearchBox.addListener('places_changed', ()=> this.searchBoxPlaces(this));
+
+
         const coordinates = new window.google.maps.LatLng(20.96778, -89.62426);
         this.createGoogleMap(coordinates);
       });
     }
   };
+
+
+
 
   // getLatLng = () => {
   //   let lat, lng;
@@ -112,11 +128,79 @@ class MapContainer extends Component {
   //   );
   // };
 
-  hideMarkers = () => {
-    for (let i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(null);
+  // hideMarkers = () => {
+  //   for (let i = 0; i < this.markers.length; i++) {
+  //     this.markers[i].setMap(null);
+  //   }
+  // };
+
+  hideMarkers = (markers) => {
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
     }
   };
+
+  createMarkersForPlaces =(places)=>{
+    let bounds = new window.google.maps.LatLngBounds();
+    for (let i = 0; i < places.length; i++) {
+      let place = places[i];
+      let icon ={
+        url:place.icon,
+        size: new window.google.maps.Size(35,35),
+        origin: new window.google.maps.Point(0,0),
+        anchor: new window.google.maps.Point(15,34),
+        scaledSize: new window.google.maps.Size(25,25),
+      };
+
+      let marker = new window.google.maps.Marker({
+        map:this.map,
+        icon:icon,
+        title:place.name,
+        position: place.geometry.location,
+        id:place.id,
+      });
+
+      this.placeMarkers.push(marker);
+
+      if(place.geometry.viewport){
+        //Only geocodes have viewport
+        bounds.union(place.geometry.viewport);
+      }else{
+        bounds.extend(place.geometry.location);
+      }
+
+      this.map.fitBounds(bounds);
+
+      this.props.setNearbyPlaceGoSearch(false);
+    }
+  }
+
+  searchBoxPlaces = (search)=>{
+    this.hideMarkers(this.placeMarkers);
+    let places = this.nearByPlacesSearchBox.getPlaces();
+    if(places.length === 0){
+      alert('we did not find any places matcching that search');
+    }else{
+      this.createMarkersForPlaces(places);
+    }
+  }
+
+  searchBoxGoPlaces=()=>{
+    let bounds =this.map.getBounds();
+    this.hideMarkers(this.placeMarkers);
+    let placesService = new window.google.maps.places.PlacesService(this.map);
+    placesService.textSearch({
+      query:document.getElementById('nearByPlacesSearchBox').value,
+      bounds:bounds
+    },(results, status)=>{
+      if(status === window.google.maps.places.PlacesServiceStatus.OK){
+        this.createMarkersForPlaces(results);
+      }
+    });
+
+  }
+
+
 
   createGoogleMap = (coordinates) => {
     this.map = new window.google.maps.Map(this.googleMapRef.current, {
@@ -128,10 +212,15 @@ class MapContainer extends Component {
       disableDefaultUI: true,
     });
 
-    // redux state
-    this.props.setMap({ map: this.map });
+    // this.nearByPlacesAutocomplete.bindTo('bounds', this.map);
+
+    // // redux state
+    // this.props.setMap({ map: this.map });
 
     let bounds = this.createMarkers(this.map);
+
+    this.nearByPlacesSearchBox.setBounds(bounds);
+
     this.map.fitBounds(bounds);
   };
 
@@ -154,8 +243,8 @@ class MapContainer extends Component {
 
       this.markers.push(marker);
 
-      // redux state
-      this.props.setMarkers({ markers: this.markers });
+      // // redux state
+      // this.props.setMarkers({ markers: this.markers });
 
       // extend the bounaries of the map for each marker
       bounds.extend(marker.position);
@@ -299,7 +388,9 @@ class MapContainer extends Component {
 
   SearchWithingTime = () => {
 
-    this.hideMarkers();
+    // this.hideMarkers();
+    this.hideMarkers(this.markers);
+
     //initialized distance matrix service
     let distanceMatrixService = new window.google.maps.DistanceMatrixService();
     let address = this.props.withinTimePlace;
@@ -347,6 +438,10 @@ class MapContainer extends Component {
       this.SearchWithingTime();
     }
 
+    if(this.props.searchNearbyPlaces){
+      this.searchBoxGoPlaces();
+    }
+
     return (
       <>
         <div className={classes.Map} id="GoogleMap" ref={this.googleMapRef} />
@@ -360,6 +455,7 @@ const mapStateToProps = (state) => {
     showDrawingTools: state.map.showDrawingTools,
     withinTimePlace: state.filters.withinTimePlace,
     searchWithinTime: state.map.searchWithinTime,
+    searchNearbyPlaces: state.map.searchNearbyPlaces,
     mode:state.filters.mode,
     maxDuration: state.filters.maxDuration
   };
@@ -368,8 +464,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setSearchWithinTime: (payload) => dispatch(mapActions.setSearchWithinTime(payload)),
-    setMarkers: (payload) => dispatch(mapActions.setMarkers(payload)),
-    setMap: (payload) => dispatch(mapActions.setMap(payload)),
+    setNearbyPlaceGoSearch: (payload) => dispatch(mapActions.setNearbyPlaceGoSearch(payload)),
   };
 };
 
