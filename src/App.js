@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import Explore from './Containers/Explore/Explore';
 import Layout from './Containers/Layout/Layout';
 
@@ -8,7 +9,8 @@ class App extends Component {
     return (
       <div className="App">
         {/* <Layout /> */}
-        <Explore/>
+        <Route path="/" exact component={Explore}/>
+        <Route path="/place" component={Layout}/>
       </div>
     );
   }

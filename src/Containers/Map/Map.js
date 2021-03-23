@@ -45,15 +45,7 @@ class MapContainer extends Component {
 
 
   componentDidMount = () => {
-    // check the googlescript exists
-    if (!document.getElementById('googleScript')) {
-      const googleMapScript = document.createElement('script');
-      googleMapScript.setAttribute('id', 'googleScript');
-      googleMapScript.src = `https://maps.googleapis.com/maps/api/js?libraries=drawing,geometry,places&v=weekly&key=${process.env.REACT_APP_API_KEY}`;
-      googleMapScript.async = true;
-      window.document.body.appendChild(googleMapScript);
-      googleMapScript.addEventListener('load', () => {
-        // this.getLatLng();
+
         this.drawingManager = new window.google.maps.drawing.DrawingManager({
           drawingMode: window.google.maps.drawing.OverlayType.POLYGON,
           drawingControl: true,
@@ -76,11 +68,15 @@ class MapContainer extends Component {
         //    THE GO BUTTON WHEN THE USER SELECTS A PREDICTIONS AND CLICKS "GO"
         this.nearByPlacesSearchBox.addListener('places_changed', ()=> this.searchBoxPlaces(this));
 
+    const query = new URLSearchParams(this.props.location.search);
+    let lat = query.get('placeLat');
+    let lng = query.get('placeLng');
+    console.log(lat, lng);
+    const coordinates = new window.google.maps.LatLng(lat, lng);
+    this.createGoogleMap(coordinates);
 
-        const coordinates = new window.google.maps.LatLng(20.96778, -89.62426);
-        this.createGoogleMap(coordinates);
-      });
-    }
+
+
   };
 
   hideMarkers = (markers) => {

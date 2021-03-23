@@ -2,6 +2,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import mapReducer from './store/reducers/map';
 import filtersReducer from './store/reducers/filters';
+import { BrowserRouter} from 'react-router-dom';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -23,7 +24,9 @@ const store = createStore(rootReducer);
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <BrowserRouter>
       <App />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
