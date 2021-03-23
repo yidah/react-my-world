@@ -1,0 +1,55 @@
+
+body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .Header {
+    height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      url(../../assets/images/swiss.jpg);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  h1 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 4.3rem;
+    font-size: 2.8rem;
+    letter-spacing: 0.1rem;
+  }
+  
+  .SearchPlaceInput {
+    height: 3rem;
+    padding: 0.5rem;
+    width: 38rem;
+    border-top-left-radius: 3.1rem;
+    border-bottom-left-radius: 3.1rem;
+  }
+  
+  .SearchButton {
+    height: 3rem;
+    width: 9.3rem;
+    background: #277bba;
+    border: none;
+    color: #fff;
+    border-top-right-radius: 3.1rem;
+    border-bottom-right-radius: 3.1rem;
+    font-size: 1rem;
+  
+  }
+  
+  .SearchButton:hover {
+    background: #479ad9;
+  }
+  
+  .SearchBox {
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 0.8rem 0.8rem;
+    border-radius: 3.1rem;
+  }
+  
