@@ -1,40 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import classes from './Map.module.css';
 import * as mapActions from '../../store/actions/map';
-// import {hideMarkers} from '../../utils/utils';
 
 class MapContainer extends Component {
   constructor() {
     super();
     this.googleMapRef = React.createRef();
   }
-
-  state = {
-    locations: [
-      {
-        title: 'Paseo Montejo',
-        location: { lat: 20.97823899166957, lng: -89.6194619683157 },
-      },
-      {
-        title: 'Cenote Xlacah',
-        location: { lat: 21.091099698327348, lng: -89.59812711762955 },
-      },
-      {
-        title: 'Plaza Grande',
-        location: { lat: 20.967153502072854, lng: -89.62369432104116 },
-      },
-      {
-        title: 'Zona Arqueologica Dzibilchaltún',
-        location: { lat: 21.092487149469196, lng: -89.59526857956277 },
-      },
-      {
-        title: 'El Pinar',
-        location: { lat: 20.991031337796024, lng: -89.61941536479338 },
-      },
-    ],
-  };
 
   polygon = null;
   drawingManager = null;
@@ -46,38 +19,44 @@ class MapContainer extends Component {
 
   componentDidMount = () => {
 
-        this.drawingManager = new window.google.maps.drawing.DrawingManager({
-          drawingMode: window.google.maps.drawing.OverlayType.POLYGON,
-          drawingControl: true,
-          drawingControlOptions: {
-            position: window.google.maps.ControlPosition.TOP_CENTER,
-            drawingModes: [window.google.maps.drawing.OverlayType.POLYGON],
-          },
-        });
+    if(!document.getElementById('googleScript')){
+      this.props.history.push('/');
+    }else{
+      
+      this.drawingManager = new window.google.maps.drawing.DrawingManager({
+        drawingMode: window.google.maps.drawing.OverlayType.POLYGON,
+        drawingControl: true,
+        drawingControlOptions: {
+          position: window.google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: [window.google.maps.drawing.OverlayType.POLYGON],
+        },
+      });
+  
+      this.drawingManager.addListener('overlaycomplete', (event) =>
+        this.drawPolygon(event)
+      );
+  
+      // this.nearByPlacesAutocomplete = new window.google.maps.places.Autocomplete(document.getElementById('nearByPlacesSearch'));
+      this.nearByPlacesSearchBox = new window.google.maps.places.SearchBox(document.getElementById('nearByPlacesSearchBox'));
+      this.withinTimePlaceSearchBox = new window.google.maps.places.SearchBox(document.getElementById('withinTimePlace'));
+  
+      // 1. the user selects a prediction from the picklist
+      // 2. NOTE: THERE SI ANOTHER EVENT HANDLER IN FILTERS COMPOENNT ATTACHED TO
+      //    THE GO BUTTON WHEN THE USER SELECTS A PREDICTIONS AND CLICKS "GO"
+      this.nearByPlacesSearchBox.addListener('places_changed', ()=> this.searchBoxPlaces(this));
+  
+      const query = new URLSearchParams(this.props.location.search);
+      let lat = query.get('placeLat');
+      let lng = query.get('placeLng');
+      let name = query.get('placeName');
+      let id = query.get('placeId');
+      let icon = query.get('placeIcon');
+  
+      console.log(lat, lng);
+      const location = new window.google.maps.LatLng(lat, lng);
+      this.createGoogleMap(location, name, id, icon);
+    }
 
-        this.drawingManager.addListener('overlaycomplete', (event) =>
-          this.drawPolygon(event)
-        );
-
-        // this.nearByPlacesAutocomplete = new window.google.maps.places.Autocomplete(document.getElementById('nearByPlacesSearch'));
-        this.nearByPlacesSearchBox = new window.google.maps.places.SearchBox(document.getElementById('nearByPlacesSearchBox'));
-        this.withinTimePlaceSearchBox = new window.google.maps.places.SearchBox(document.getElementById('withinTimePlace'));
-
-        // 1. the user selects a prediction from the picklist
-        // 2. NOTE: THERE SI ANOTHER EVENT HANDLER IN FILTERS COMPOENNT ATTACHED TO
-        //    THE GO BUTTON WHEN THE USER SELECTS A PREDICTIONS AND CLICKS "GO"
-        this.nearByPlacesSearchBox.addListener('places_changed', ()=> this.searchBoxPlaces(this));
-
-    const query = new URLSearchParams(this.props.location.search);
-    let lat = query.get('placeLat');
-    let lng = query.get('placeLng');
-    let name = query.get('placeName');
-    let id = query.get('placeId');
-    let icon = query.get('placeIcon');
-
-    console.log(lat, lng);
-    const location = new window.google.maps.LatLng(lat, lng);
-    this.createGoogleMap(location, name, id, icon);
   };
 
   // When drawing a polygon we only hide as the
@@ -168,9 +147,6 @@ class MapContainer extends Component {
     });
 
   }
-
-
-
   createGoogleMap = (location, placeName, placeId, placeIcon) => {
     let bounds = new window.google.maps.LatLngBounds();
     let infoWindow = new window.google.maps.InfoWindow();
@@ -206,39 +182,11 @@ class MapContainer extends Component {
       );
 
     bounds.extend(location);
+
     this.nearByPlacesSearchBox.setBounds(bounds);
     this.withinTimePlaceSearchBox.setBounds(bounds);
+    // this.map.fitBounds(bounds);
 
-  };
-
-  createMarkers = (map) => {
-    let infoWindow = new window.google.maps.InfoWindow();
-    let bounds = new window.google.maps.LatLngBounds();
-    // We create array of markers
-    for (let i = 0; i < this.state.locations.length; i++) {
-      // Position from the location array
-      let position = this.state.locations[i].location;
-      let title = this.state.locations[i].title;
-      // Marker per location
-      let marker = new window.google.maps.Marker({
-        map: map,
-        position: position,
-        title: title,
-        animation: window.google.maps.Animation.DROP,
-        id: i,
-      });
-
-      this.markers.push(marker);
-
-      // extend the bounaries of the map for each marker
-      bounds.extend(marker.position);
-
-      // Adde listener to open info window
-      marker.addListener('click', () =>
-        this.populateInfoWindow(map, marker, infoWindow)
-      );
-    }
-    return bounds;
   };
 
   // Populates infoWindow when the marker is clicked.
@@ -295,10 +243,6 @@ class MapContainer extends Component {
       this.polygon.setMap(null);
       //here remove markers
     }
-
-    // switch drawing to HAND (no longer drawing)so user can click on the markers
-    // this.drawingManager.setDrawingMode(null);
-
     // create a new editable polygon
     this.polygon = event.overlay;
     this.polygon.setEditable(true);
@@ -311,20 +255,6 @@ class MapContainer extends Component {
     this.polygon.getPath().addListener('insert_at', this.searchWithinPolygon);
   };
 
-  // searchWithinPolygon = () => {
-  //   for (let i = 0; i < this.markers.length; i++) {
-  //     if (
-  //       window.google.maps.geometry.poly.containsLocation(
-  //         this.markers[i].position,
-  //         this.polygon
-  //       )
-  //     ) {
-  //       this.markers[i].setMap(this.map);
-  //     } else {
-  //       this.markers[i].setMap(null);
-  //     }
-  //   }
-  // };
   searchWithinPolygon = () => {
     for (let i = 0; i < this.placeMarkers.length; i++) {
       if (

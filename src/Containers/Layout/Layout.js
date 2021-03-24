@@ -12,7 +12,7 @@ class Layout extends Component {
     return (
       <div className={classes.Layout}>
         <Filters/>
-        <Map location={this.props.location} />
+        <Map location={this.props.location} history={this.props.history} />
       </div>
     );
   }
