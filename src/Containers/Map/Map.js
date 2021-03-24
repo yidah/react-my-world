@@ -71,22 +71,40 @@ class MapContainer extends Component {
     const query = new URLSearchParams(this.props.location.search);
     let lat = query.get('placeLat');
     let lng = query.get('placeLng');
+    let name = query.get('placeName');
+    let id = query.get('placeId');
+    let icon = query.get('placeIcon');
+
     console.log(lat, lng);
-    const coordinates = new window.google.maps.LatLng(lat, lng);
-    this.createGoogleMap(coordinates);
-
-
-
+    const location = new window.google.maps.LatLng(lat, lng);
+    this.createGoogleMap(location, name, id, icon);
   };
 
+  // When drawing a polygon we only hide as the
+  // user can extend the boundaries and markers within
+  // the boundaries should appear
   hideMarkers = (markers) => {
     for (let i = 0; i < markers.length; i++) {
       markers[i].setMap(null);
     }
   };
 
+  //User search for different nearby places
+  deleteMarkers = (markers) => {
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+      markers[i] = null
+    }
+  };
+
   createMarkersForPlaces =(places)=>{
+    // Clean up other searches
+    this.deleteMarkers(this.placeMarkers);
+    this.placeMarkers.length = 0;
+
+    let infoWindow = new window.google.maps.InfoWindow();
     let bounds = new window.google.maps.LatLngBounds();
+
     for (let i = 0; i < places.length; i++) {
       let place = places[i];
       let icon ={
@@ -101,6 +119,7 @@ class MapContainer extends Component {
         map:this.map,
         icon:icon,
         title:place.name,
+        animation: window.google.maps.Animation.DROP,
         position: place.geometry.location,
         id:place.id,
       });
@@ -113,6 +132,11 @@ class MapContainer extends Component {
       }else{
         bounds.extend(place.geometry.location);
       }
+
+      // Adde listener to open info window
+      marker.addListener('click', () =>
+            this.populateInfoWindow(this.map, marker, infoWindow)
+          );
 
       this.map.fitBounds(bounds);
 
@@ -147,23 +171,44 @@ class MapContainer extends Component {
 
 
 
-  createGoogleMap = (coordinates) => {
+  createGoogleMap = (location, placeName, placeId, placeIcon) => {
+    let bounds = new window.google.maps.LatLngBounds();
+    let infoWindow = new window.google.maps.InfoWindow();
     this.map = new window.google.maps.Map(this.googleMapRef.current, {
-      zoom: 16,
-      // center: {
-      //   lat: coordinates.lat(),
-      //   lng: coordinates.lng(),
-      // },
+      zoom: 13,
+      center: {
+        lat: location.lat(),
+        lng: location.lng(),
+      },
       disableDefaultUI: true,
     });
 
-    let bounds = this.createMarkers(this.map);
+    let icon ={
+      url:placeIcon,
+      size: new window.google.maps.Size(35,35),
+      origin: new window.google.maps.Point(0,0),
+      anchor: new window.google.maps.Point(15,34),
+      scaledSize: new window.google.maps.Size(25,25),
+    };
 
+    let marker = new window.google.maps.Marker({
+      map:this.map,
+      icon:icon,
+      title:placeName,
+      animation: window.google.maps.Animation.DROP,
+      position: location,
+      id:placeId,
+    });
+
+    // Adde listener to open info window
+    marker.addListener('click', () =>
+        this.populateInfoWindow(this.map, marker, infoWindow)
+      );
+
+    bounds.extend(location);
     this.nearByPlacesSearchBox.setBounds(bounds);
     this.withinTimePlaceSearchBox.setBounds(bounds);
-    // this.nearByPlacesAutocomplete.bindTo('bounds', this.map);
 
-    this.map.fitBounds(bounds);
   };
 
   createMarkers = (map) => {
@@ -266,17 +311,31 @@ class MapContainer extends Component {
     this.polygon.getPath().addListener('insert_at', this.searchWithinPolygon);
   };
 
+  // searchWithinPolygon = () => {
+  //   for (let i = 0; i < this.markers.length; i++) {
+  //     if (
+  //       window.google.maps.geometry.poly.containsLocation(
+  //         this.markers[i].position,
+  //         this.polygon
+  //       )
+  //     ) {
+  //       this.markers[i].setMap(this.map);
+  //     } else {
+  //       this.markers[i].setMap(null);
+  //     }
+  //   }
+  // };
   searchWithinPolygon = () => {
-    for (let i = 0; i < this.markers.length; i++) {
+    for (let i = 0; i < this.placeMarkers.length; i++) {
       if (
         window.google.maps.geometry.poly.containsLocation(
-          this.markers[i].position,
+          this.placeMarkers[i].position,
           this.polygon
         )
       ) {
-        this.markers[i].setMap(this.map);
+        this.placeMarkers[i].setMap(this.map);
       } else {
-        this.markers[i].setMap(null);
+        this.placeMarkers[i].setMap(null);
       }
     }
   };
@@ -300,7 +359,7 @@ class MapContainer extends Component {
           
           //Display markers that are within time selected
           if(duration <= maxDuration){
-           this.markers[i].setMap(this.map);
+           this.placeMarkers[i].setMap(this.map);
           //  atLeastOne = true;
 
            //InfoWindow that opens immediately with distance and duration 
@@ -308,11 +367,11 @@ class MapContainer extends Component {
              content:'<div><b>From:</b> ' + from +'</div><div><b>To:</b> ' + to +'</div><div><b>Time and Distance: </b>' + durationText + ' away, ' + distanceText +'</div>'
            });
            
-           infowindow.open(this.props.map,this.markers[i]);
-           this.markers[i].infowindow= infowindow;
+           infowindow.open(this.props.map,this.placeMarkers[i]);
+           this.placeMarkers[i].infowindow= infowindow;
 
            //close the small window if user clicks marker 
-           window.google.maps.event.addListener(this.markers[i], 'click', ()=>{
+           window.google.maps.event.addListener(this.placeMarkers[i], 'click', ()=>{
            infowindow.close();
            })
           }
@@ -328,7 +387,7 @@ class MapContainer extends Component {
   SearchWithingTime = () => {
 
     // this.hideMarkers();
-    this.hideMarkers(this.markers);
+    this.hideMarkers(this.placeMarkers);
 
     //initialized distance matrix service
     let distanceMatrixService = new window.google.maps.DistanceMatrixService();
@@ -338,8 +397,8 @@ class MapContainer extends Component {
       alert('You must enter an address, estimate time and transport to get there');
     } else {
       let origins = [];
-      for (let i = 0; i < this.markers.length; i++) {
-        origins[i] = this.markers[i].position;
+      for (let i = 0; i < this.placeMarkers.length; i++) {
+        origins[i] = this.placeMarkers[i].position;
       }
       let destination = address;
       let mode = this.props.mode;

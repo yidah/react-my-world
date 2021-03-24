@@ -4,14 +4,22 @@ import React, { Component } from 'react';
 class Explore extends Component {
   searchPlacesField = () => {
     let place = this.exploreSearchBox.getPlaces();
-    let placeLat = place[0].geometry.location.lat();; 
-    let placeLng = place[0].geometry.location.lng();; 
+    let placeLat = place[0].geometry.location.lat(); 
+    let placeLng = place[0].geometry.location.lng();
+    let placeIcon = place[0].icon;
+    let placeName = place[0].name;
+    let placeId = place[0].Id
     console.log(placeLat,placeLng);
+    console.log(place);
+    console.log(place[0].icon);
     
     const queryParams = [];
     queryParams.push(encodeURIComponent('placeLat') + '=' + encodeURIComponent(placeLat));
     queryParams.push(encodeURIComponent('placeLng') + '=' + encodeURIComponent(placeLng));
-
+    queryParams.push(encodeURIComponent('placeName') + '=' + encodeURIComponent(placeName));
+    queryParams.push(encodeURIComponent('placeId') + '=' + encodeURIComponent(placeId));
+    queryParams.push(encodeURIComponent('placeIcon') + '=' + encodeURIComponent(placeIcon));
+    
     const queryString = queryParams.join('&');
     console.log(queryString);
 
