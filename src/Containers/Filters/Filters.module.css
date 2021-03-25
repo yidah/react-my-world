@@ -30,17 +30,19 @@
   -moz-border-radius: 0.6rem 0.6rem 0 0;
   color: #fff;
   text-shadow: 0.06rem 0.06rem 0.1rem rgba(0, 0, 0, 0.12);
-  font: normal 1.8rem 'Bitter', serif;
+  /* font: normal 1.8rem 'Bitter', serif; */
   -moz-box-shadow: inset 0 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
   -webkit-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
   box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
   border: 0.06rem solid #a0a92d;
+  font-size: 1.8rem;
 }
 
 .FiltersForm label {
-  font: 13px Arial, Helvetica, sans-serif;
+  /* font: .8rem Arial, Helvetica, sans-serif; */
   color: #888;
   padding: 0.6rem;
+  font-size: .8rem;
 }
 
 .FiltersForm input[type='text'],
@@ -70,9 +72,10 @@
 }
 
 .FiltersForm .FiltersSectionTitle {
-  font: normal 1.2rem 'Bitter', serif;
+  /* font: normal 1.2rem 'Bitter', serif; */
   color: #a0a92d;
   margin-bottom: 0.3rem;
+  font-size: 1.2rem;
 }
 .FiltersForm .FiltersSectionTitle span {
   background: #a0a92d;
@@ -109,7 +112,7 @@
   -moz-border-radius: 0.3rem;
   color: #fff;
   text-shadow: 0.06rem 0.06rem 0.1rem rgba(0, 0, 0, 0.12);
-  font: normal 1.8rem 'Bitter', serif;
+  /* font: normal 1.8rem 'Bitter', serif; */
   -moz-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
   -webkit-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
   box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);

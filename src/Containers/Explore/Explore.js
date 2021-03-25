@@ -60,13 +60,10 @@ class Explore extends Component {
         <form>
           <h1>Find Your Dreams' Place </h1>
           <div className={classes.SearchBox}>
-            <input
-              id="exploreSearchBox"
+            <input id="exploreSearchBox"
               className={classes.SearchPlaceInput}
               type="text"
-              placeholder="Explore a place in the world"
-              required
-            />
+              placeholder="Explore a place in the world"/>
             <button className={classes.SearchButton} type="button" onClick={this.searchPlacesExplore}>
               Explore
             </button>

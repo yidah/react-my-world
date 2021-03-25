@@ -1,6 +1,5 @@
 
 body {
-    margin: 0;
     padding: 0;
   }
   
@@ -26,11 +25,17 @@ body {
   .SearchPlaceInput {
     height: 3rem;
     padding: 0.5rem;
+    padding-left: 1.5rem;
     width: 38rem;
+    border: 0 solid;
     border-top-left-radius: 3.1rem;
     border-bottom-left-radius: 3.1rem;
   }
   
+  .SearchPlaceInput:focus{
+    outline: none;
+  }
+
   .SearchButton {
     height: 3rem;
     width: 9.3rem;
