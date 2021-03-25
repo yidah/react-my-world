@@ -12,10 +12,8 @@ class MapContainer extends Component {
   polygon = null;
   drawingManager = null;
   map = null;
-  markers = [];
   placeMarkers=[];
   nearByPlacesAutocomplete= null;
-
 
   componentDidMount = () => {
 
@@ -36,14 +34,23 @@ class MapContainer extends Component {
         this.drawPolygon(event)
       );
   
-      // this.nearByPlacesAutocomplete = new window.google.maps.places.Autocomplete(document.getElementById('nearByPlacesSearch'));
-      this.nearByPlacesSearchBox = new window.google.maps.places.SearchBox(document.getElementById('nearByPlacesSearchBox'));
-      this.withinTimePlaceSearchBox = new window.google.maps.places.SearchBox(document.getElementById('withinTimePlace'));
-  
+
+      // SEARCH BOX IMPLEMENTATION - DOES NOT RESTRICT TO AREA SELECTED
+      // this.nearByPlacesSearchBox = new window.google.maps.places.SearchBox(document.getElementById('nearByPlacesSearchBox'));
+      // this.withinTimePlaceSearchBox = new window.google.maps.places.SearchBox(document.getElementById('withinTimePlace'));
+      
+      // SEARCH BOX EVENT LISTENER
       // 1. the user selects a prediction from the picklist
       // 2. NOTE: THERE SI ANOTHER EVENT HANDLER IN FILTERS COMPOENNT ATTACHED TO
       //    THE GO BUTTON WHEN THE USER SELECTS A PREDICTIONS AND CLICKS "GO"
-      this.nearByPlacesSearchBox.addListener('places_changed', ()=> this.searchBoxPlaces(this));
+      // this.nearByPlacesSearchBox.addListener('places_changed', ()=> this.searchBoxPlaces(this));
+
+      let options = {
+        strictBounds: true
+      };
+      this.nearByPlacesSearchBox = new window.google.maps.places.Autocomplete(document.getElementById('nearByPlacesSearchBox'),options);
+      this.withinTimePlaceSearchBox = new window.google.maps.places.Autocomplete(document.getElementById('withinTimePlace'),options);
+      
   
       const query = new URLSearchParams(this.props.location.search);
       let lat = query.get('placeLat');
@@ -52,9 +59,14 @@ class MapContainer extends Component {
       let id = query.get('placeId');
       let icon = query.get('placeIcon');
   
-      console.log(lat, lng);
-      const location = new window.google.maps.LatLng(lat, lng);
-      this.createGoogleMap(location, name, id, icon);
+      if(lat && lng){
+        const location = new window.google.maps.LatLng(lat, lng);
+        this.createGoogleMap(location, name, id, icon);
+
+      }else{
+        this.getLatLng(name);
+      }
+
     }
 
   };
@@ -123,15 +135,35 @@ class MapContainer extends Component {
     }
   }
 
-  searchBoxPlaces = (search)=>{
-    this.hideMarkers(this.placeMarkers);
-    let places = this.nearByPlacesSearchBox.getPlaces();
-    if(places.length === 0){
-      alert('we did not find any places matcching that search');
-    }else{
-      this.createMarkersForPlaces(places);
-    }
-  }
+  // searchBoxPlaces = (search)=>{
+  //   this.hideMarkers(this.placeMarkers);
+  //   let places = this.nearByPlacesSearchBox.getPlaces();
+  //   if(places.length === 0){
+  //     alert('we did not find any places matcching that search');
+  //   }else{
+  //     this.createMarkersForPlaces(places);
+  //   }
+  // }
+
+    getLatLng = (exploredPlace) => {
+
+    new window.google.maps.Geocoder().geocode(
+      { address: `${exploredPlace}` },
+      (results, status) => {
+        if (status === window.google.maps.GeocoderStatus.OK) {
+        let icon = 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png';
+        let address = results[0].formatted_address;
+        let placeName =address.substring(0,address.indexOf(","));
+
+        this.createGoogleMap(results[0].geometry.location,placeName, results[0].place_id, icon);
+        } else {
+          alert(
+            'Geocode was not successful for the following reason: ' + status
+          );
+        }
+      }
+    );
+  };
 
   searchBoxGoPlaces=()=>{
     let bounds =this.map.getBounds();
@@ -148,6 +180,8 @@ class MapContainer extends Component {
 
   }
   createGoogleMap = (location, placeName, placeId, placeIcon) => {
+    this.props.setExploredPlaceName(placeName);
+
     let bounds = new window.google.maps.LatLngBounds();
     let infoWindow = new window.google.maps.InfoWindow();
     this.map = new window.google.maps.Map(this.googleMapRef.current, {
@@ -183,10 +217,12 @@ class MapContainer extends Component {
 
     bounds.extend(location);
 
-    this.nearByPlacesSearchBox.setBounds(bounds);
-    this.withinTimePlaceSearchBox.setBounds(bounds);
-    // this.map.fitBounds(bounds);
+    // SEARCH BOX IMPLEMENTATION - REMOVED AS IT DOES NOT RESTRICT SEARCH AREA
+    // this.nearByPlacesSearchBox.setBounds(bounds);
+    // this.withinTimePlaceSearchBox.setBounds(bounds);
 
+    this.nearByPlacesSearchBox.bindTo('bounds', this.map);
+    this.withinTimePlaceSearchBox.bindTo('bounds', this.map);
   };
 
   // Populates infoWindow when the marker is clicked.
@@ -276,7 +312,6 @@ class MapContainer extends Component {
       let origins = response.originAddresses;
       let destinations = response.destinationAddresses;
 
-      // let atLeastOne = false;
       for (let i = 0; i < origins.length; i++) {
         let results = response.rows[i].elements;
         for (let j = 0; j < results.length; j++) {
@@ -290,7 +325,6 @@ class MapContainer extends Component {
           //Display markers that are within time selected
           if(duration <= maxDuration){
            this.placeMarkers[i].setMap(this.map);
-          //  atLeastOne = true;
 
            //InfoWindow that opens immediately with distance and duration 
            let infowindow = new window.google.maps.InfoWindow({
@@ -392,6 +426,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setSearchWithinTime: (payload) => dispatch(mapActions.setSearchWithinTime(payload)),
     setNearbyPlaceGoSearch: (payload) => dispatch(mapActions.setNearbyPlaceGoSearch(payload)),
+    setExploredPlaceName: (payload) => dispatch(mapActions.setExploredPlaceName(payload))
   };
 };
 

@@ -19,3 +19,9 @@ export const setNearbyPlaceGoSearch = (payload)=>{
         payload:payload
     }
 }
+export const setExploredPlaceName = (payload)=>{
+    return{
+        type:actionTypes.SET_EXPLORED_PLACE_NAME,
+        payload:payload
+    }
+}

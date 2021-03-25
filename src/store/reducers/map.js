@@ -3,7 +3,8 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   showDrawingTools: false,
   searchWithinTime:false,
-  searchNearbyPlaces:false
+  searchNearbyPlaces:false,
+  exploredPlaceName:'Explore A Place'
 };
 
 const map = (state = initialState, action) => {
@@ -25,7 +26,11 @@ const map = (state = initialState, action) => {
         ...state,
         searchNearbyPlaces: action.payload,
       };
-
+    case actionTypes.SET_EXPLORED_PLACE_NAME:
+      return { 
+        ...state,
+        exploredPlaceName:action.payload,
+      };
     default:
       return state;
   }

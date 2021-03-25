@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import Explore from './Containers/Explore/Explore';
-import Layout from './Containers/Layout/Layout';
+import Place from './Containers/Place/Place';
 
 class App extends Component {
 
   render() {
     return (
       <div className="App">
-        {/* <Layout /> */}
         <Route path="/" exact component={Explore}/>
-        <Route path="/place" component={Layout}/>
+        <Route path="/place" component={Place}/>
       </div>
     );
   }

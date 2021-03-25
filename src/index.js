@@ -13,14 +13,6 @@ import reportWebVitals from './reportWebVitals';
 const rootReducer = combineReducers({filters:filtersReducer, map:mapReducer})
 const store = createStore(rootReducer);
 
-// const app = (
-//   <React.StrictMode>
-//     <Provider store={store}><App /></Provider>
-//   </React.StrictMode>
-// )
-
-// ReactDOM.render(app,document.getElementById('root'));
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

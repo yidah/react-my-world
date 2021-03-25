@@ -4,24 +4,18 @@ import { connect } from 'react-redux';
 import classes from './Filters.module.css';
 import * as mapActions from '../../store/actions/map';
 import * as filterActions from '../../store/actions/filters';
-// import {hideMarkers} from '../../utils/utils';
 
 class Filters extends Component {
 
   changeHandler = (e) => {
     this.props.setFormValues({ name: e.target.name, value: e.target.value });
-    console.log('name:' + e.target.name + 'value:' + e.target.value);
   };
 
-
-
   render() {
-
-
     return (
       <div className={classes.Filters}>
         <div className={classes.FiltersForm}>
-          <h1 className={classes.FiltersExploredPlace}>Merida</h1>
+          <h1 className={classes.FiltersExploredPlace}>{this.props.exploredPlaceName}</h1>
           <form>
             <div className={classes.FiltersSectionTitle}>
               <span>1</span>Search for nearby places
@@ -59,18 +53,6 @@ class Filters extends Component {
 
             <div className={classes.FiltersSectionContent}>
               <div className={classes.FiltersSectionContentMultiGroup}>
-                <div
-                  className={classes.FiltersSectionContentMultiGroupSubGroup}
-                >
-                  <input
-                    type="text"
-                    name="favoriteArea"
-                    placeholder="i.e. an area within the place you are exploring "
-                  />
-                  <input type="submit" name="Zoom" value="Zoom" />
-                </div>
-
-                <div className={classes.FiltersSectionContentMultiGroup}>
                   <div
                     className={classes.FiltersSectionContentMultiGroupSubGroup}
                   >
@@ -99,26 +81,26 @@ class Filters extends Component {
                     </select>
                     <label htmlFor="mode">of:</label>
                   </div>
-                </div>
-                <div
-                  className={classes.FiltersSectionContentMultiGroupSubGroup}
-                >
-                  <input
-                    type="text"
-                    id="withinTimePlace"
-                    name="withinTimePlace"
-                    placeholder="i.e the address of your hotel"
-                    // THIS IS HANDLED IN MAPS AS THIS CONTROL IS LINKED TO SEARCHBOX GOOGLE CONTROL
-                    // onChange={this.changeHandler}
-                    // value={this.props.withinTimePlace}
-                  />
-                  <input
-                    type="button"
-                    name="Go"
-                    value="Go"
-                    onClick={()=>this.props.setSearchWithinTime(true)}
-                  />
-                </div>
+
+                  <div
+                    className={classes.FiltersSectionContentMultiGroupSubGroup}
+                  >
+                    <input
+                      type="text"
+                      id="withinTimePlace"
+                      name="withinTimePlace"
+                      placeholder="i.e the address of your hotel"
+                      // THIS IS HANDLED IN MAPS AS THIS CONTROL IS LINKED TO SEARCHBOX GOOGLE CONTROL
+                      // onChange={this.changeHandler}
+                      // value={this.props.withinTimePlace}
+                    />
+                    <input
+                      type="button"
+                      name="Go"
+                      value="Go"
+                      onClick={()=>this.props.setSearchWithinTime(true)}
+                    />
+                  </div>
               </div>
             </div>
           </form>
@@ -131,6 +113,7 @@ class Filters extends Component {
 const mapStateToProps = (state) => {
   return {
     showDrawingTools: state.map.showDrawingTools,
+    exploredPlaceName: state.map.exploredPlaceName
   };
 };
 
