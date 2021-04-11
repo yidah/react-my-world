@@ -1,60 +1,91 @@
+/* Mobile first  320px—480px: Mobile devices*/
 
 body {
+  padding: 0;
+}
+
+.Header {
+  height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../../assets/images/swiss.jpg);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 5px;
+}
+
+h1 {
+  text-align: center;
+  color: #fff;
+  margin: 4.3rem 0;
+  font-size: 2.5rem;
+  letter-spacing: 0.1rem;
+}
+
+.SearchPlaceInput {
+  height: 3rem;
+  padding: 0.5rem;
+  padding-left: 1.5rem;
+  width: 70%;
+  border: 0 solid;
+  border-top-left-radius: 3.1rem;
+  border-bottom-left-radius: 3.1rem;
+}
+
+.SearchPlaceInput:focus {
+  outline: none;
+}
+
+.SearchButton {
+  height: 3rem;
+  width: 30%;
+  background: #277bba;
+  border: none;
+  color: #fff;
+  border-top-right-radius: 3.1rem;
+  border-bottom-right-radius: 3.1rem;
+  font-size: 1rem;
+}
+
+.SearchButton:hover {
+  background: #479ad9;
+}
+
+.SearchBox {
+  background-color: rgba(255, 255, 255, 0.4);
+  padding: 0.4rem 0.4rem;
+  border-radius: 3.1rem;
+}
+
+/* 769px—1024px: Small screens, laptops */
+@media (min-width: 769px) {
+  .Header {
+    align-items: center;
     padding: 0;
   }
-  
-  .Header {
-    height: 100vh;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-      url(../../assets/images/swiss.jpg);
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+
   h1 {
-    text-align: center;
-    color: #fff;
+    margin: 0;
     margin-bottom: 4.3rem;
     font-size: 2.8rem;
-    letter-spacing: 0.1rem;
   }
-  
+
+  .SearchBox {
+    padding: 0.8rem 0.8rem;
+  }
+}
+
+/* 1025px—1200px: Desktops, large screens */
+@media (min-width: 1025px) {
   .SearchPlaceInput {
-    height: 3rem;
-    padding: 0.5rem;
-    padding-left: 1.5rem;
     width: 38rem;
-    border: 0 solid;
-    border-top-left-radius: 3.1rem;
-    border-bottom-left-radius: 3.1rem;
-  }
-  
-  .SearchPlaceInput:focus{
-    outline: none;
+    max-width: 38rem;
   }
 
   .SearchButton {
-    height: 3rem;
     width: 9.3rem;
-    background: #277bba;
-    border: none;
-    color: #fff;
-    border-top-right-radius: 3.1rem;
-    border-bottom-right-radius: 3.1rem;
-    font-size: 1rem;
-  
+    max-width: 9.3rem;
   }
-  
-  .SearchButton:hover {
-    background: #479ad9;
-  }
-  
-  .SearchBox {
-    background-color: rgba(255, 255, 255, 0.4);
-    padding: 0.8rem 0.8rem;
-    border-radius: 3.1rem;
-  }
-  
+}
