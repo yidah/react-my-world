@@ -1,7 +1,9 @@
+
 .Filters {
-  width: 50%;
+  width: 100%;
   height: 100%;
-  padding: 0 2rem;
+  padding-left: 1rem;
+  padding-right: .5rem;
 }
 
 .FiltersForm {
@@ -15,7 +17,7 @@
   -webkit-box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
 }
 .FiltersForm .FiltersSectionContent {
-  padding: 1.8rem;
+  padding: .5rem;
   background: #f8f8f8;
   border-radius: 0.4rem;
   margin-bottom: 0.9rem;
@@ -42,7 +44,7 @@
   /* font: .8rem Arial, Helvetica, sans-serif; */
   color: #888;
   padding: 0.6rem;
-  font-size: .8rem;
+  font-size: 0.7rem;
 }
 
 .FiltersForm input[type='text'],
@@ -70,12 +72,20 @@
   -moz-box-shadow: inset 0rem 0.06rem 0.06rem rgba(0, 0, 0, 0.33);
   -webkit-box-shadow: inset 0rem 0.06rem 0.06rem rgba(0, 0, 0, 0.33);
 }
+.FiltersForm select {
+  font-size: .7rem;
+  width: 90px;
+}
+
+.FiltersForm input[type='text']{
+  font-size: .7rem;
+}
 
 .FiltersForm .FiltersSectionTitle {
   /* font: normal 1.2rem 'Bitter', serif; */
   color: #a0a92d;
   margin-bottom: 0.3rem;
-  font-size: 1.2rem;
+  font-size: .9rem;
 }
 .FiltersForm .FiltersSectionTitle span {
   background: #a0a92d;
@@ -95,7 +105,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  
 }
 
 .FiltersSectionContentMultiGroupSubGroup {
@@ -117,7 +126,7 @@
   -webkit-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
   box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
   border: 0.06rem solid #a0a92d;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
 }
 .FiltersForm input[type='button']:hover,
 .FiltersForm input[type='submit']:hover {
@@ -127,3 +136,136 @@
   box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.28);
 }
 
+/* 1025px—1200px: Desktops, large screens */
+@media (min-width: 1025px) {
+
+  .Filters {
+    width: 50%;
+    height: 100%;
+    padding: 0 2rem;
+  }
+  
+  .FiltersForm {
+    padding: 1.8rem;
+    background: #fff;
+    border-radius: 0.6rem;
+    -webkit-border-radius: 0.6rem;
+    -moz-border-radius: 0.6rem;
+    box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
+    -moz-box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
+    -webkit-box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
+  }
+  .FiltersForm .FiltersSectionContent {
+    padding: 1.8rem;
+    background: #f8f8f8;
+    border-radius: 0.4rem;
+    margin-bottom: 0.9rem;
+    display: flex;
+  }
+  .FiltersForm .FiltersExploredPlace {
+    background: #a0a92d;
+    padding: 1.25rem 1.8rem 0.9rem 1.8rem;
+    margin: -1.8rem -1.8rem 1.8rem -1.8rem;
+    border-radius: 0.6rem 0.6rem 0 0;
+    -webkit-border-radius: 0.6rem 0.6rem 0 0;
+    -moz-border-radius: 0.6rem 0.6rem 0 0;
+    color: #fff;
+    text-shadow: 0.06rem 0.06rem 0.1rem rgba(0, 0, 0, 0.12);
+    /* font: normal 1.8rem 'Bitter', serif; */
+    -moz-box-shadow: inset 0 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+    -webkit-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+    box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+    border: 0.06rem solid #a0a92d;
+    font-size: 1.8rem;
+  }
+  
+  .FiltersForm label {
+    /* font: .8rem Arial, Helvetica, sans-serif; */
+    color: #888;
+    padding: 0.6rem;
+    font-size: .8rem;
+  }
+  
+  .FiltersForm input[type='text'],
+  .FiltersForm input[type='date'],
+  .FiltersForm input[type='datetime'],
+  .FiltersForm input[type='email'],
+  .FiltersForm input[type='number'],
+  .FiltersForm input[type='search'],
+  .FiltersForm input[type='time'],
+  .FiltersForm input[type='url'],
+  .FiltersForm input[type='password'],
+  .FiltersForm textarea,
+  .FiltersForm select {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 100%;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 0.3rem;
+    -webkit-border-radius: 0.3rem;
+    -moz-border-radius: 0.3rem;
+    border: 0.1rem solid #fff;
+    box-shadow: inset 0rem 0.06rem 0.06rem rgba(0, 0, 0, 0.33);
+    -moz-box-shadow: inset 0rem 0.06rem 0.06rem rgba(0, 0, 0, 0.33);
+    -webkit-box-shadow: inset 0rem 0.06rem 0.06rem rgba(0, 0, 0, 0.33);
+  }
+  
+  .FiltersForm .FiltersSectionTitle {
+    /* font: normal 1.2rem 'Bitter', serif; */
+    color: #a0a92d;
+    margin-bottom: 0.3rem;
+    font-size: 1.2rem;
+  }
+  .FiltersForm .FiltersSectionTitle span {
+    background: #a0a92d;
+    padding: 0.3rem 0.6rem 0.3rem 0.6rem;
+    position: absolute;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border: 0.2rem solid #fff;
+    font-size: 0.8rem;
+    margin-left: -2.8rem;
+    color: #fff;
+    margin-top: -0.1rem;
+  }
+  
+  .FiltersSectionContentMultiGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    
+  }
+  
+  .FiltersSectionContentMultiGroupSubGroup {
+    display: flex;
+    padding-bottom: 1rem;
+  }
+  
+  .FiltersForm input[type='button'],
+  .FiltersForm input[type='submit'] {
+    background: #a0a92d;
+    padding: 0.5rem 1.2rem 0.5rem 1.2rem;
+    border-radius: 0.3rem;
+    -webkit-border-radius: 0.3rem;
+    -moz-border-radius: 0.3rem;
+    color: #fff;
+    text-shadow: 0.06rem 0.06rem 0.1rem rgba(0, 0, 0, 0.12);
+    /* font: normal 1.8rem 'Bitter', serif; */
+    -moz-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+    -webkit-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+    box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.17);
+    border: 0.06rem solid #a0a92d;
+    font-size: 0.9rem;
+  }
+  .FiltersForm input[type='button']:hover,
+  .FiltersForm input[type='submit']:hover {
+    background: #888e3e;
+    -moz-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.28);
+    -webkit-box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.28);
+    box-shadow: inset 0rem 0.1rem 0.1rem 0rem rgba(255, 255, 255, 0.28);
+  }
+
+}  

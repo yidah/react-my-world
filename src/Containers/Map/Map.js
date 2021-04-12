@@ -18,7 +18,7 @@ class MapContainer extends Component {
   componentDidMount = () => {
 
     if(!document.getElementById('googleScript')){
-      this.props.history.push('/');
+      // this.props.history.push('/');
     }else{
       
       this.drawingManager = new window.google.maps.drawing.DrawingManager({
@@ -166,6 +166,8 @@ class MapContainer extends Component {
   };
 
   searchBoxGoPlaces=()=>{
+    document.getElementById('filtersDiv').style.display = "none";
+    
     let bounds =this.map.getBounds();
     this.hideMarkers(this.placeMarkers);
     let placesService = new window.google.maps.places.PlacesService(this.map);

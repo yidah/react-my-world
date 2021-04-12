@@ -13,7 +13,7 @@ class Filters extends Component {
 
   render() {
     return (
-      <div className={classes.Filters}>
+      <div id="filtersDiv" className={classes.Filters}>
         <div className={classes.FiltersForm}>
           <h1 className={classes.FiltersExploredPlace}>{this.props.exploredPlaceName}</h1>
           <form>
@@ -79,12 +79,13 @@ class Filters extends Component {
                       <option value="BICYCLING">bicycling</option>
                       <option value="TRANSIT">bus</option>
                     </select>
-                    <label htmlFor="mode">of:</label>
+                   
                   </div>
 
                   <div
                     className={classes.FiltersSectionContentMultiGroupSubGroup}
                   >
+                     <label htmlFor="mode">of:</label>
                     <input
                       type="text"
                       id="withinTimePlace"

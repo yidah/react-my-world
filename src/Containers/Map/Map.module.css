@@ -1,6 +1,6 @@
 .Map {
-    width: 50%;
-    /* height: 100%; */
+    width: 320px;
+    height: 500px;
     padding:1.8rem;
     background: #FFF;
     border-radius: 0.6rem;
@@ -10,4 +10,22 @@
     -moz-box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
     -webkit-box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
     
+}
+
+/* 1025px—1200px: Desktops, large screens */
+@media (min-width: 1025px) {
+
+    .Map {
+        width: 50%;
+        /* height: 100%; */
+        padding:1.8rem;
+        background: #FFF;
+        border-radius: 0.6rem;
+        -webkit-border-radius:0.6rem;
+        -moz-border-radius: 0.6rem;
+        box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
+        -moz-box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
+        -webkit-box-shadow: 0rem 0rem 0.6rem rgba(0, 0, 0, 0.13);
+        
+    }
 }
